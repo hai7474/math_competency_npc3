@@ -1,0 +1,1916 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Business Math Quest: The Comic &mdash; Issue #1</title>
+  <style>
+    :root {
+      --scarlet: #CC0033; --scarlet2: #E51937; --ink: #141414; --paper: #f7f1e3;
+      --gray: #6e6e78; --lightgray: #d9d4c7; --gold: #f5c542; --white: #ffffff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #2b2b2e; color: var(--ink);
+      font-family: "Comic Sans MS", "Segoe Print", "Chalkboard SE", cursive;
+      display: flex; justify-content: center; padding: 14px; min-height: 100vh;
+    }
+    button { font-family: inherit; cursor: pointer; }
+    .hidden { display: none !important; }
+    .comic-letter, h1, h2, .burst-btn, .stamp, .fx-text, .mast-title {
+      font-family: Impact, "Arial Black", "Haettenschweiler", sans-serif;
+      letter-spacing: .03em;
+    }
+
+    /* ===== the comic book ===== */
+    .book {
+      width: min(1120px, 100%); background: var(--paper); position: relative;
+      border: 4px solid var(--ink); box-shadow: 10px 10px 0 rgba(0,0,0,.55);
+    }
+    .book::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background-image: radial-gradient(circle, rgba(204,0,51,.10) 1.1px, transparent 1.3px);
+      background-size: 10px 10px;
+    }
+    .masthead {
+      position: relative; z-index: 2; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+      background: var(--scarlet); border-bottom: 4px solid var(--ink); padding: 8px 12px;
+    }
+    .mast-title {
+      color: #fff; font-size: 22px; text-shadow: 2px 2px 0 var(--ink); transform: skew(-4deg);
+      white-space: nowrap;
+    }
+    .mast-box {
+      background: #fff; border: 3px solid var(--ink); padding: 3px 9px; font-size: 12px;
+      font-weight: 700; box-shadow: 2px 2px 0 var(--ink); white-space: nowrap;
+    }
+    .mast-box b { color: var(--scarlet); font-size: 14px; }
+    .logo-box { padding: 2px 6px; line-height: 0; }
+    .logo-box img { height: 30px; width: auto; display: block; }
+    .mast-spacer { flex: 1; }
+    .mast-btn {
+      background: var(--ink); color: #fff; border: 3px solid #fff; outline: 2px solid var(--ink);
+      font-size: 11px; font-weight: 700; padding: 4px 8px;
+    }
+    .coin {
+      display: inline-block; width: 13px; height: 13px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ffe9a8, var(--gold) 60%, #b8860b);
+      border: 2px solid var(--ink); vertical-align: -2px;
+    }
+    .page { position: relative; z-index: 1; padding: 18px; min-height: 560px; }
+    .caption-bar {
+      position: relative; z-index: 2; background: #fff8dc; border-top: 4px solid var(--ink);
+      padding: 7px 14px; font-size: 12.5px; font-weight: 700; font-style: italic; min-height: 32px;
+    }
+    .caption-bar::before { content: "EDITOR'S NOTE: "; color: var(--scarlet); font-style: normal; }
+
+    /* ===== shared comic bits ===== */
+    .panel {
+      background: #fff; border: 4px solid var(--ink); box-shadow: 7px 7px 0 rgba(20,20,20,.85);
+      position: relative;
+    }
+    .caption-box {
+      display: inline-block; background: var(--scarlet); color: #fff; border: 3px solid var(--ink);
+      padding: 4px 10px; font-weight: 700; font-size: 12.5px; box-shadow: 3px 3px 0 var(--ink);
+      transform: rotate(-1deg);
+    }
+    .caption-box.alt { background: #fff; color: var(--ink); transform: rotate(.6deg); }
+    .caption-box.alt em { font-style: normal; color: var(--scarlet); }
+    .stamp {
+      display: inline-block; border: 4px solid var(--scarlet); color: var(--scarlet);
+      background: rgba(255,255,255,.92); font-size: 15px; padding: 1px 10px;
+      transform: rotate(-13deg); letter-spacing: .06em;
+    }
+    .burst-btn {
+      background: var(--gold); border: 4px solid var(--ink); color: var(--ink);
+      font-size: 17px; padding: 10px 22px; transform: rotate(-2deg);
+      box-shadow: 4px 4px 0 var(--ink); transition: transform .1s;
+    }
+    .burst-btn:hover { transform: rotate(-2deg) scale(1.05); }
+    .burst-btn:active { transform: rotate(-2deg) translate(3px,3px); box-shadow: 1px 1px 0 var(--ink); }
+    .burst-btn.scarlet { background: var(--scarlet); color: #fff; }
+    .secondary {
+      background: #fff; border: 3px solid var(--ink); padding: 8px 14px; font-weight: 700;
+      font-size: 13px; box-shadow: 3px 3px 0 var(--ink);
+    }
+    .secondary:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
+    .text-button { background: none; border: none; text-decoration: underline; font-size: 12px; font-weight: 700; color: var(--gray); }
+    .primary { /* used by completion template */
+      background: var(--scarlet); color: #fff; border: 4px solid var(--ink);
+      font-family: Impact, "Arial Black", sans-serif; font-size: 15px; letter-spacing: .04em;
+      padding: 9px 18px; box-shadow: 4px 4px 0 var(--ink); transform: rotate(-1deg);
+    }
+    .onoma {
+      position: absolute; font-family: Impact, "Arial Black", sans-serif; color: rgba(204,0,51,.14);
+      pointer-events: none; user-select: none; z-index: 0;
+    }
+
+    /* ===== speech bubbles ===== */
+    .bubble {
+      position: relative; background: #fff; border: 4px solid var(--ink); border-radius: 20px;
+      padding: 14px 18px; font-size: 15px; line-height: 1.55; box-shadow: 4px 4px 0 rgba(20,20,20,.85);
+    }
+    .bubble.npc-bubble::before {
+      content: ""; position: absolute; left: -24px; top: 34px;
+      border: 12px solid transparent; border-right-color: var(--ink);
+    }
+    .bubble.npc-bubble::after {
+      content: ""; position: absolute; left: -14px; top: 38px;
+      border: 8px solid transparent; border-right-color: #fff;
+    }
+    .bubble.player-bubble::before {
+      content: ""; position: absolute; right: -24px; bottom: 22px;
+      border: 12px solid transparent; border-left-color: var(--ink);
+    }
+    .bubble.player-bubble::after {
+      content: ""; position: absolute; right: -14px; bottom: 26px;
+      border: 8px solid transparent; border-left-color: #fff;
+    }
+    .bubble.thought { border-radius: 40px; font-style: italic; }
+    .bubble.thought::before {
+      content: ""; position: absolute; right: -16px; bottom: -6px; left: auto; top: auto;
+      width: 14px; height: 14px; border: 3px solid var(--ink); border-radius: 50%; background: #fff;
+    }
+    .bubble.thought::after {
+      content: ""; position: absolute; right: -28px; bottom: -16px; left: auto; top: auto;
+      width: 8px; height: 8px; border: 3px solid var(--ink); border-radius: 50%; background: #fff;
+    }
+
+    /* ===== cover ===== */
+    .cover { max-width: 780px; margin: 0 auto; padding: 18px 22px 26px; text-align: center; transform: rotate(-.4deg); }
+    .cover-top { display: flex; gap: 10px; align-items: stretch; justify-content: space-between; flex-wrap: wrap; }
+    .brand-box {
+      background: var(--scarlet); color: #fff; border: 3px solid var(--ink); padding: 4px 10px;
+      font-family: Impact, sans-serif; font-size: 15px; line-height: 1.1; box-shadow: 3px 3px 0 var(--ink);
+      display: flex; align-items: center; text-align: left;
+    }
+    .issue { align-self: center; font-weight: 700; font-size: 13px; }
+    .approved {
+      border: 3px solid var(--ink); border-radius: 50%; width: 86px; height: 86px; font-size: 8.5px;
+      display: flex; align-items: center; justify-content: center; padding: 8px; font-weight: 700;
+      background: #fff; transform: rotate(8deg);
+    }
+    .cover-title {
+      font-size: clamp(42px, 7vw, 76px); line-height: .95; color: var(--scarlet);
+      -webkit-text-stroke: 3px var(--ink); text-shadow: 6px 6px 0 var(--ink);
+      transform: skew(-3deg) rotate(-1.5deg); margin: 14px 0 6px;
+    }
+    .cover-tag {
+      display: inline-block; background: var(--ink); color: var(--gold); padding: 4px 14px;
+      font-weight: 700; font-size: 14px; transform: rotate(1deg); margin-bottom: 12px;
+    }
+    .cover-art { position: relative; display: flex; justify-content: center; align-items: flex-end; gap: 8px; min-height: 240px; }
+    .cover-hero svg { filter: drop-shadow(5px 5px 0 rgba(20,20,20,.5)); }
+    .cover-bubble { position: absolute; top: 0; left: 50%; transform: translateX(-105%); max-width: 250px; font-size: 13.5px; font-weight: 700; }
+    .cover-bubble::before {
+      content: ""; position: absolute; right: -20px; bottom: 14px;
+      border: 11px solid transparent; border-left-color: var(--ink);
+    }
+    .cover-bubble::after {
+      content: ""; position: absolute; right: -11px; bottom: 18px;
+      border: 7px solid transparent; border-left-color: #fff;
+    }
+    .villain-tease {
+      position: absolute; right: 4%; bottom: 8%; width: 150px; text-align: center;
+      background: #fff; border: 4px solid var(--ink); border-radius: 50%; padding: 14px 10px;
+      box-shadow: 4px 4px 0 var(--ink); transform: rotate(6deg); font-size: 9.5px; font-weight: 700;
+    }
+    .villain-tease b { color: var(--scarlet); display: block; font-size: 10.5px; }
+    .cover-note { margin-top: 16px; font-size: 11px; color: var(--gray); font-weight: 700; }
+
+    /* ===== table of contents (chapters) ===== */
+    .page-title {
+      text-align: center; font-size: 30px; color: #fff; -webkit-text-stroke: 2px var(--ink);
+      text-shadow: 4px 4px 0 var(--ink); background: var(--scarlet); border: 4px solid var(--ink);
+      box-shadow: 5px 5px 0 var(--ink); display: block; width: fit-content; margin: 0 auto 18px;
+      padding: 4px 26px; transform: rotate(-1deg);
+    }
+    .chapters { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; position: relative; z-index: 1; }
+    .chapter {
+      background: #fff; border: 4px solid var(--ink); box-shadow: 5px 5px 0 rgba(20,20,20,.85);
+      padding: 10px 8px 12px; text-align: center; position: relative; transition: transform .12s;
+    }
+    .chapter:nth-child(odd) { transform: rotate(-.7deg); }
+    .chapter:nth-child(even) { transform: rotate(.7deg); }
+    .chapter:not(.locked):hover { transform: scale(1.045); z-index: 2; }
+    .chapter .ch-num {
+      position: absolute; top: -10px; left: -10px; background: var(--ink); color: #fff;
+      font-family: Impact, sans-serif; font-size: 13px; padding: 2px 8px; border: 2px solid #fff;
+      outline: 2px solid var(--ink);
+    }
+    .chapter .ch-name { display: block; font-family: Impact, sans-serif; font-size: 14px; margin-top: 6px; letter-spacing: .04em; }
+    .chapter .ch-quest { display: block; font-size: 10.5px; color: var(--gray); font-weight: 700; }
+    .chapter.locked { filter: grayscale(1); background: var(--lightgray); cursor: not-allowed; }
+    .chapter.locked .ch-lock {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: repeating-linear-gradient(45deg, rgba(20,20,20,.55) 0 12px, rgba(20,20,20,.7) 12px 24px);
+      color: #fff; font-family: Impact, sans-serif; font-size: 15px; letter-spacing: .08em;
+    }
+    .chapter.current { outline: 4px solid var(--scarlet); outline-offset: 3px; animation: pulse 1.2s infinite; }
+    @keyframes pulse { 50% { outline-color: rgba(204,0,51,.25); } }
+    .chapter .stamp { position: absolute; top: 32%; left: 50%; transform: translateX(-50%) rotate(-13deg); z-index: 3; }
+    .chapter .ch-star {
+      position: absolute; top: -13px; right: -11px; color: var(--gold); font-size: 26px;
+      text-shadow: 2px 2px 0 var(--ink); z-index: 3;
+    }
+
+    /* ===== question / story panel ===== */
+    .strip { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
+    .qpanel { display: grid; grid-template-columns: 168px 1fr; gap: 14px; padding: 18px; min-height: 350px; transform: rotate(-.3deg); }
+    .npc-side, .player-side { text-align: center; }
+    .char-name {
+      display: block; margin-top: 6px; font-family: Impact, sans-serif; font-size: 13px; letter-spacing: .05em;
+    }
+    .char-name i { display: block; font-family: "Comic Sans MS", cursive; font-style: italic; font-size: 10px; color: var(--gray); }
+    .q-main { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+    #menu { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    #menu li {
+      position: relative; background: #fff; border: 3px solid var(--ink); border-radius: 14px;
+      padding: 9px 12px 9px 38px; font-size: 13.5px; font-weight: 700; cursor: pointer;
+      box-shadow: 3px 3px 0 rgba(20,20,20,.8); line-height: 1.4;
+    }
+    #menu li::before {
+      content: attr(data-l); position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+      width: 22px; height: 22px; border-radius: 50%; background: var(--ink); color: #fff;
+      font-family: Impact, sans-serif; font-size: 12px; display: flex; align-items: center; justify-content: center;
+    }
+    #menu li:hover { background: #fff3f5; }
+    #menu li.sel { background: var(--scarlet); color: #fff; border-color: var(--ink); }
+    #menu li.sel::before { background: var(--gold); color: var(--ink); }
+    .player-row { display: grid; grid-template-columns: 1fr 120px; gap: 10px; align-items: end; margin-top: auto; }
+    .player-bubble { font-size: 13.5px; font-weight: 700; }
+    .dlg-input {
+      width: 100%; border: 3px solid var(--ink); border-radius: 10px; padding: 8px 10px;
+      font-family: inherit; font-weight: 700; font-size: 15px; margin-top: 6px; background: #fffef8;
+    }
+    .dlg-input:focus { outline: 3px solid var(--scarlet); }
+    .dlg-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 14px; }
+    .quest-strip {
+      margin-top: 14px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+      background: #fff; border: 3px solid var(--ink); padding: 8px 12px; font-size: 12px; font-weight: 700;
+      box-shadow: 3px 3px 0 rgba(20,20,20,.8);
+    }
+    .quest-strip b { color: var(--scarlet); }
+    .coinbar { flex: 1; min-width: 130px; height: 12px; background: #eee7d4; border: 3px solid var(--ink); }
+    .coinbar span { display: block; height: 100%; width: 0; background: repeating-linear-gradient(45deg, var(--gold) 0 8px, #e0b32e 8px 16px); transition: width .35s; }
+
+    /* ===== action burst feedback ===== */
+    #fxLayer { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; z-index: 20; }
+    #fxLayer.show { display: flex; animation: fxpop .22s; }
+    #fxLayer svg { position: absolute; width: min(360px, 78%); height: auto; }
+    .fx-text {
+      position: relative; font-size: 40px; color: #fff; -webkit-text-stroke: 2px var(--ink);
+      text-shadow: 4px 4px 0 var(--ink); transform: rotate(-7deg); text-align: center; line-height: 1;
+    }
+    .fx-text span { display: block; font-size: 20px; margin-top: 6px; }
+    @keyframes fxpop { 0% { transform: scale(.4); } 70% { transform: scale(1.12); } 100% { transform: scale(1); } }
+
+    /* ===== completion / case file ===== */
+    .badge-art { text-align: center; padding: 8px 0; }
+    .badge-art svg { max-width: 420px; width: 100%; height: auto; }
+    .completion-copy {
+      font-family: Impact, sans-serif; font-size: 19px; color: var(--scarlet); margin-top: 10px; letter-spacing: .03em;
+    }
+    .topline { margin-top: 14px; text-align: center; }
+    .topline h2 { font-size: 24px; -webkit-text-stroke: 1px var(--ink); color: #fff; text-shadow: 3px 3px 0 var(--ink); display: inline-block; background: var(--scarlet); border: 3px solid var(--ink); padding: 2px 16px; transform: rotate(-1deg); }
+    .badge-chip {
+      display: inline-block; background: var(--gold); color: var(--ink); border: 3px solid var(--ink);
+      padding: 3px 10px; font-size: 12px; font-weight: 700; box-shadow: 2px 2px 0 var(--ink); margin-bottom: 6px;
+    }
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0; align-items: center; justify-content: center; }
+    .report-wrap { overflow: auto; background: #fff; border: 4px solid var(--ink); box-shadow: 5px 5px 0 rgba(20,20,20,.85); }
+    .report-wrap table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 920px; font-family: Verdana, sans-serif; }
+    .report-wrap th { background: var(--ink); color: #fff; padding: 7px 8px; text-align: left; font-size: 11px; }
+    .report-wrap td { border-bottom: 2px solid #e5ddc8; padding: 7px 8px; vertical-align: top; }
+    .status-right { color: #1d7a3a; font-weight: 700; }
+    .status-wrong { color: var(--scarlet); font-weight: 700; }
+    .status-skipped { color: var(--gray); font-weight: 700; }
+
+    /* ===== print ===== */
+    .print-area { display: none; color: #000; font-family: Georgia, serif; }
+    .print-area .print-badge { text-align: center; margin: 14px 0 18px; }
+    .print-area .print-badge svg { width: 300px; max-width: 60%; height: auto; }
+    .print-area table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .print-area th, .print-area td { border: 1px solid #999; padding: 6px; text-align: left; vertical-align: top; }
+    @media print {
+      body { background: #fff; padding: 0; display: block; }
+      body.printing .print-area { display: block; }
+      body.printing .book { display: none !important; }
+    }
+
+    /* ===== responsive ===== */
+    @media (max-width: 820px) {
+      .chapters { grid-template-columns: repeat(2, 1fr); }
+      .qpanel { grid-template-columns: 1fr; }
+      .npc-side { display: flex; align-items: center; gap: 10px; text-align: left; }
+      .npc-side svg { width: 74px; height: auto; }
+      #menu { grid-template-columns: 1fr; }
+      .player-row { grid-template-columns: 1fr 84px; }
+      .cover-title { font-size: 40px; }
+      .mast-title { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="book" id="book">
+    <header class="masthead">
+      <span class="mast-box logo-box"><img data-rbus-logo alt="Rutgers Business School"></span>
+      <span class="mast-title">BUSINESS MATH QUEST: THE COMIC</span>
+      <span class="mast-box"><span class="coin" aria-hidden="true"></span> <b id="hudCoins">0</b>/80 COINS</span>
+      <span class="mast-box"><b id="hudSeals">0</b>/16 SOLVED</span>
+      <span class="mast-spacer"></span>
+      <button class="mast-btn" id="soundBtn" type="button">SOUND:ON</button>
+      <button class="mast-btn" id="resetModuleSidebarBtn" type="button">RESET</button>
+    </header>
+    <main class="page">
+      <section id="landing">
+        <span class="onoma" style="top:6%;left:3%;font-size:44px;transform:rotate(-14deg)">POW!</span>
+        <span class="onoma" style="top:16%;right:4%;font-size:38px;transform:rotate(10deg)">&Sigma;!</span>
+        <span class="onoma" style="bottom:10%;left:6%;font-size:36px;transform:rotate(8deg)">ZAP!</span>
+        <div class="cover panel">
+          <div class="cover-top">
+            <span class="brand-box">RUTGERS<br>COMICS</span>
+            <span class="issue">ISSUE #1 &middot; 80&cent; &middot; STILL ONLY 80 COINS!</span>
+            <span class="approved">APPROVED BY THE MATH CODE AUTHORITY &#10004;</span>
+          </div>
+          <h1 class="cover-title">BUSINESS<br>MATH QUEST</h1>
+          <span class="cover-tag">16 CHAPTERS OF MATHEMATICAL MAYHEM!</span>
+          <div class="cover-art">
+            <div class="bubble cover-bubble">I'LL ANSWER EVERY QUESTION IN THE KINGDOM &mdash; ONE CHAPTER AT A TIME!</div>
+            <span class="cover-hero" id="coverHero"></span>
+            <div class="villain-tease"><b>FIRST APPEARANCE!</b>DR. ANALYSIS &mdash; THE FINAL BOSS &mdash; AWAITS IN CHAPTER 16!</div>
+          </div>
+          <button class="burst-btn" id="startBtn" type="button">&#9658; OPEN THE COMIC &#9668;</button>
+          <p class="cover-note">A practice &amp; remediation comic. Coins &amp; chapters save in this browser only &mdash; nothing is sent to the Canvas Gradebook.</p>
+        </div>
+      </section>
+      <section id="mapScreen" class="hidden" aria-label="Table of contents"></section>
+      <section id="gamePanel" class="hidden" aria-live="polite"></section>
+    </main>
+    <footer class="caption-bar" id="hintBar">Open the comic to begin your quest!</footer>
+  </div>
+  <div class="print-area" id="printArea" aria-hidden="true"></div>
+
+  <script>
+    "use strict";
+
+    const LOGO_DATA_URI = "data:image/png;base64,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gWaZXDvK/oG+3fdhDgBBF7EL6feZWruDHfis6c+4ua/FBw/HUaa4xXHshHmbD6ePsX9YL58bE4zxbzhRusgvA29d7dd/4JeHbrHzK3G/bpwyGZxf5FenTjGRdjFGznM8EssXyYu8sdoim61WHTvJOcFBvsLB2Edj/Ij2ataDU011ERFHCk4REUcKThERRwpOERFHCk4REUcKThERRwpOERFHCk4REUcKThERRwpOERFHCk4REUcKThERRwpOERFHCk4REUcKThERRwpOERFHCk4REUcKThERRwpOERFHCk4REUcKThERRwpOERFHCk4REUcKThERRwpOERFHCk4REUcKThERRwpOERFHCk4REUcKThERRwpOERFH+9IuQDdPs5J2ESTcdNoFCKJjZyRk9vjq0BmniIgjBaeIiCMFp4iIIwWniIgjBaeIiKM0e9WXgSdSfH/JLx07xbSRdgE6jLU27TKIiOSKmuoiIo4UnCIijhScIiKOFJwiIo4UnCIijhScIiKOFJwiIo4UnCIijhScIiKOFJwiIo4UnCIijhScIiKOFJwiIo4UnCIijhScIiKOFJwiIo4UnCIijhScIiKOFJwiIo4UnCIijhScIiKOFJwiIo7SXFddBmSMqQAVYBKY2bO56f9sWWtbSZVJRpMxZgbvOKv4j44NvHXuAZattZlY+3zYdUPrqueIMWYSmPMfVaDk8PQlvAO8CTSzcoBLNvnB0znWZh2e2ube46wZc9G6SrpuGKDmP4ahif+NNIwP0BizwP3fJkEa1trGAO81AyxE3d9aW+33vbq8dxWYB07H9ZrARWARWOwnRB0/+2Vr7bzDazcdi7NgrV10fI7re0U+flyPlZgNepzX8PLAJSzDtLl7nPX1Nwrj140acCbGl41UN+qATejRAKrWWuJ44AVz1PeuD/heVZffNabfr+L/AYf5N9nwj4HKED/7puNru/4OrQE+49iPH9djJeZHX8e5X+blIZethXcCMJmjurFAl7qRdOfQGeCSMabpNwUkgP/Nv0y8Z5ndlICzwLIxpu43efJm2v+85O71u8iMMXXgEnAy7sLsMQ28DLQG+XsZY+ZIrm48C/x8b91Iq1d9Fq+i1lJ6/0zzD+TXcLtOM6jdAVpN8H3jUk+7ABnRctnZGNPA+7snqQS8ZoxZ9i9rROZnxg9Itm6A9xm1/NBOdThS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";
+    const STORAGE_KEY = "rbsBusinessMathQuest.v2";
+    const PASS_POINTS = 80;
+    const POINTS = { Easy: 5, Medium: 10, Hard: 15, Challenge: 20 };
+
+    const BADGES = [
+      { id: "number-systems", name: "Number Systems Badge", icon: "123", concepts: [
+        "This badge reviews the real number system. Natural numbers are the counting numbers, integers include positives, negatives, and zero, rational numbers can be written as a ratio of integers, and irrational numbers such as \u221A2 cannot be written as exact fractions.",
+        "You will also compare values on a number line and use absolute value as distance from zero. These ideas support later business math work with gains, losses, account balances, and signed quantities."
+      ] },
+      { id: "operations", name: "Operations Badge", icon: "+", concepts: [
+        "This badge focuses on arithmetic operations with signed numbers. Subtraction can be rewritten as adding the opposite, and the law of signs tells you whether products and quotients are positive or negative.",
+        "You will also use real-number properties such as commutative, identity, inverse, and distributive properties. Division by zero is undefined because no number times zero can produce a nonzero numerator."
+      ] },
+      { id: "fraction-forge", name: "Fraction Forge Badge", icon: "\u00BD", concepts: [
+        "Fractions represent parts of a whole and ratios compare two quantities. Simplifying a fraction means dividing the numerator and denominator by the same common factor without changing the value.",
+        "Reciprocals are multiplicative inverses: a nonzero number times its reciprocal equals 1. These skills matter for rates, proportions, shares of a budget, and business ratios."
+      ] },
+      { id: "exponent", name: "Exponent Badge", icon: "x\u00B2", concepts: [
+        "Exponents describe repeated multiplication. A zero exponent on a nonzero base equals 1, a negative exponent creates a reciprocal, and powers of 10 are especially useful for decimals and large business values.",
+        "You will practice exponent rules such as product of powers and power of a power. These rules help simplify formulas before substituting values."
+      ] },
+      { id: "notation-foundations", name: "Notation Foundations Badge", icon: "\u221A", concepts: [
+        "This badge reviews notation used throughout the workshop: order of operations, absolute value, factorial notation, scientific notation, and subscripts. Order of operations keeps calculations consistent: grouping, exponents, multiplication/division, then addition/subtraction.",
+        "Subscripts label specific values, such as p1 and x1 for the first product price and quantity. Scientific notation makes very large and very small quantities easier to read and compute."
+      ] },
+      { id: "summation", name: "Summation Badge", icon: "\u03A3", concepts: [
+        "Summation notation uses the sigma symbol to show repeated addition. The index tells you which values to plug in, and the lower and upper limits tell you where to start and stop.",
+        "In business settings, summation appears when adding sales across regions, costs across categories, or values across time periods."
+      ] },
+      { id: "polynomial-builder", name: "Polynomial Builder Badge", icon: "x\u00B3", concepts: [
+        "A monomial is one algebraic term, while a polynomial is a sum of monomial terms with nonnegative whole-number exponents. The degree of a polynomial is the highest exponent that determines much of its behavior.",
+        "You will combine like terms, multiply binomials using FOIL, and factor expressions. Factoring reverses multiplication and is often used to solve equations."
+      ] },
+      { id: "algebra-mastery", name: "Algebra Mastery Badge", icon: "x=", concepts: [
+        "Algebra is about preserving equality while isolating an unknown. Inverse operations let you undo addition, subtraction, multiplication, division, powers, and roots in a logical order.",
+        "These techniques support business equations such as cost, revenue, and break-even models, where solving for x often means finding a quantity, price, or time."
+      ] },
+      { id: "function-machine", name: "Function Machine Badge", icon: "f(x)", concepts: [
+        "A function assigns each input exactly one output. In f(x), x is usually the independent variable and f(x) is the dependent output.",
+        "Business functions can use one variable, such as R(x)=px, or multiple variables, such as R=p1x1+p2x2. Function notation helps organize revenue, cost, demand, and profit relationships."
+      ] },
+      { id: "graph-navigator", name: "Graph Navigator Badge", icon: "\u2295", concepts: [
+        "Graphing connects algebra to pictures. Ordered pairs are written as (x, y), the origin is (0, 0), and the signs of x and y determine the quadrant.",
+        "Tables of inputs and outputs can be graphed as points. A graph represents a function when each input has exactly one output."
+      ] },
+      { id: "linear-functions", name: "Linear Functions Badge", icon: "m", concepts: [
+        "A linear function has a constant rate of change. In slope-intercept form y=mx+b, m is the slope and b is the y-intercept.",
+        "Slope tells how much the output changes for a one-unit increase in the input. In business, it can represent a unit cost, unit revenue, price change, or contribution margin."
+      ] },
+      { id: "quadratic", name: "Quadratic Badge", icon: "U", concepts: [
+        "Quadratic functions have degree 2 and graph as parabolas. The direction the parabola opens depends on the leading coefficient, and the vertex represents a maximum or minimum point.",
+        "Solving a quadratic means finding input values where the output is zero. Factoring, square roots, and vertex form are common tools for interpreting quadratic models."
+      ] },
+      { id: "curve-analyst", name: "Curve Analyst Badge", icon: "e^x", concepts: [
+        "This badge compares nonlinear function families, including higher-degree polynomial functions and exponential functions. Polynomial degree affects the curve shape and long-run behavior.",
+        "Exponential models repeatedly multiply by a growth or decay factor. A base greater than 1 shows growth, while a base between 0 and 1 shows decay."
+      ] },
+      { id: "systems-solver", name: "Systems Solver Badge", icon: "\u2229", concepts: [
+        "A system of equations asks for values that satisfy more than one equation at the same time. Graphically, the solution is where the graphs intersect.",
+        "Substitution and elimination are two core solution methods. Systems model business situations such as supply and demand equilibrium, break-even points, and nonlinear intersections."
+      ] },
+      { id: "finance-applications", name: "Finance Applications Badge", icon: "$", concepts: [
+        "This badge applies algebra and functions to finance. Simple interest uses I=Prt, while compound interest uses A=P(1+r)^t because interest is earned on prior interest.",
+        "Present value discounts future money back to today. You will also use cost, revenue, profit, break-even, supply, and demand models to interpret business decisions."
+      ] },
+      { id: "business-math-analyst", name: "Business Math Analyst Badge", icon: "80+", concepts: [
+        "The final badge combines the full workshop: algebraic techniques, function notation, graph interpretation, systems of equations, and finance applications.",
+        "You will interpret business scenarios by choosing the right model, calculating accurately, and explaining what the result means for revenue, cost, profit, growth, or decision-making."
+      ] }
+    ];
+
+    const CONCEPT_DETAILS = {
+      "number-systems": [
+        "This badge teaches the real number system, which is the collection of numbers normally used for measurement, money, quantities, and graphing on a number line. Natural numbers are the positive counting numbers 1, 2, 3, and so on. Whole numbers include 0 plus the natural numbers. Integers include negative whole numbers, 0, and positive whole numbers.",
+        "Rational numbers can be written as a ratio of two integers, such as 3/4, -8/2, 0.25, or repeating decimals. Irrational numbers are real numbers that cannot be written exactly as a fraction of integers, such as \u221A2 or \u03C0. All rational and irrational numbers are real numbers.",
+        "The number line helps compare values: numbers farther to the right are greater, and numbers farther to the left are smaller. Absolute value means distance from zero, so it is never negative. These ideas support business contexts such as account balances, losses, gains, and quantity comparisons."
+      ],
+      operations: [
+        "This badge reviews arithmetic operations with signed numbers. Adding a negative moves left on the number line, while subtracting a number is the same as adding its opposite. For example, 7 - (-3) becomes 7 + 3.",
+        "The law of signs is used for multiplication and division: two numbers with the same sign produce a positive result, and two numbers with different signs produce a negative result. Division by zero is undefined because no number multiplied by zero can produce a nonzero amount.",
+        "You will also use real-number properties. The commutative property allows changing order in addition or multiplication, the identity property keeps a value unchanged, the inverse property combines opposites or reciprocals to make 0 or 1, and the distributive property expands multiplication across addition or subtraction."
+      ],
+      "fraction-forge": [
+        "Fractions represent parts of a whole and ratios compare quantities. A fraction such as 3/5 means 3 parts out of 5 equal parts. A ratio such as 12:18 compares two quantities and can often be simplified.",
+        "To simplify a fraction or ratio, divide both parts by the same common factor. To add or subtract fractions, use a common denominator. To multiply fractions, multiply numerators and denominators, then simplify when possible.",
+        "A reciprocal is the flipped version of a nonzero number: the reciprocal of 3/5 is 5/3. Reciprocals matter because division by a fraction is multiplication by its reciprocal. Business ratios, budget shares, conversion rates, and proportional reasoning all depend on this skill."
+      ],
+      exponent: [
+        "Exponents show repeated multiplication. For example, 2^4 means 2 multiplied by itself four times. Powers of 10 are especially important for decimals, place value, scientific notation, and large business quantities.",
+        "A nonzero number raised to the zero power equals 1. A negative exponent means reciprocal form, so 10^-2 equals 1/10^2. When multiplying powers with the same base, add exponents. When raising a power to another power, multiply exponents.",
+        "Exponent rules help simplify expressions before evaluating them. They also prepare you for exponential growth and decay models used in finance, forecasting, and compound interest."
+      ],
+      "notation-foundations": [
+        "This badge reviews notation used throughout the workshop: order of operations, absolute value, factorials, scientific notation, and subscripts. Order of operations keeps calculations consistent: grouping symbols first, then exponents, multiplication and division, and finally addition and subtraction.",
+        "Absolute value measures distance from zero. Factorial notation means a descending product, such as 5! = 5 x 4 x 3 x 2 x 1. Scientific notation writes a number as a value from 1 up to 10 times a power of 10, which is useful for very large or very small values.",
+        "Subscripts label specific items in a sequence or formula. In a revenue model such as R = p1x1 + p2x2, p1 and x1 refer to the first product price and quantity, while p2 and x2 refer to the second product."
+      ],
+      summation: [
+        "Summation notation uses the sigma symbol, \u03A3, to represent repeated addition. The expression being added is written beside sigma, and the index tells which values to substitute.",
+        "The lower limit tells where the index starts and the upper limit tells where it stops. For example, summing i from 1 to 4 means 1 + 2 + 3 + 4. If the expression is i^2, square each index value before adding.",
+        "Summation is common in business because totals are built from many parts: total sales across regions, total costs across departments, total transactions across days, or total values across products."
+      ],
+      "polynomial-builder": [
+        "A monomial is a single algebraic term, such as 7x^3 or 5. A polynomial is a sum or difference of monomial terms with nonnegative whole-number exponents, such as 4x^2 + 3x - 8.",
+        "The degree of a polynomial is the highest exponent in one variable, or the sum of exponents in a multivariable monomial. Like terms have the same variable part and can be combined by adding or subtracting coefficients.",
+        "FOIL is a method for multiplying two binomials: first, outer, inner, last. Factoring reverses multiplication by rewriting a polynomial as a product. Factoring is especially useful for solving equations and understanding roots."
+      ],
+      "algebra-mastery": [
+        "Algebra focuses on solving for unknown values while preserving equality. Whatever operation is applied to one side of an equation must also be applied to the other side.",
+        "Inverse operations undo each other: addition and subtraction, multiplication and division, powers and roots. Solving usually means simplifying both sides, moving variable terms together, moving constants together, and isolating the variable.",
+        "In business math, algebra is used to solve for quantities, prices, costs, revenues, and break-even points. For example, if revenue equals cost, solving the equation tells the output level where the business breaks even."
+      ],
+      "function-machine": [
+        "A function is a rule that assigns each input exactly one output. In f(x), x is the input or independent variable, and f(x) is the output or dependent variable.",
+        "Functions can use one variable, such as C(x) = 200 + 8x for cost, or multiple variables, such as R = p1x1 + p2x2 for two-product revenue. Substituting values into a function lets you evaluate a business situation.",
+        "Function notation helps organize relationships among price, quantity, revenue, cost, demand, and profit. It also prepares you to read tables, graphs, and formulas as different representations of the same relationship."
+      ],
+      "graph-navigator": [
+        "Graphing connects algebraic rules to visual patterns. An ordered pair is written (x, y), where x is the horizontal coordinate and y is the vertical coordinate. The origin is (0, 0).",
+        "The coordinate plane has four quadrants. Quadrant I has positive x and positive y, Quadrant II has negative x and positive y, Quadrant III has negative x and negative y, and Quadrant IV has positive x and negative y.",
+        "A table of input-output values can be graphed by plotting each row as a point. A graph represents a function if each x-value has exactly one y-value, which is the idea behind the vertical line test."
+      ],
+      "linear-functions": [
+        "A linear function has a constant rate of change. Its graph is a straight line. In slope-intercept form y = mx + b, m is the slope and b is the y-intercept.",
+        "Slope is change in y divided by change in x. It tells how much the output changes when the input increases by one unit. Parallel nonvertical lines have the same slope.",
+        "In business, slope can represent variable cost per unit, revenue per unit, price change per unit, or contribution margin. The intercept often represents a starting value such as fixed cost or an initial balance."
+      ],
+      quadratic: [
+        "A quadratic function has degree 2 and graphs as a parabola. If the leading coefficient is positive, the parabola opens upward. If it is negative, the parabola opens downward.",
+        "The vertex is the turning point of the parabola. It represents a minimum for an upward-opening parabola and a maximum for a downward-opening parabola. The axis of symmetry is the vertical line through the vertex.",
+        "Solving a quadratic equation means finding x-values that make the output equal zero. These solutions are also called roots or x-intercepts. Factoring, square roots, and vertex form are common tools."
+      ],
+      "curve-analyst": [
+        "This badge compares nonlinear models, including polynomial and exponential functions. Higher-degree polynomials can curve and change direction more than linear functions.",
+        "Exponential functions use a variable in the exponent. A model such as A(t)=P(1+r)^t represents repeated multiplication by a growth factor. If the base is greater than 1, the model shows growth. If the base is between 0 and 1, it shows decay.",
+        "These models help describe business situations such as customer growth, depreciation, compound growth, demand curves, and long-run trends that are not well represented by a straight line."
+      ],
+      "systems-solver": [
+        "A system of equations asks for values that satisfy multiple equations at the same time. Graphically, the solution is the intersection point of the graphs.",
+        "Substitution solves one equation for a variable and replaces that variable in another equation. Elimination adds or subtracts equations to cancel one variable. Both methods should produce the same solution when a unique solution exists.",
+        "Systems are useful in business for break-even analysis, supply and demand equilibrium, comparing cost plans, and finding where two models agree. Nonlinear systems can involve intersections between lines, parabolas, or other curves."
+      ],
+      "finance-applications": [
+        "This badge applies algebra and functions to finance. Simple interest uses I = Prt, where P is principal, r is the interest rate, and t is time. It does not earn interest on prior interest.",
+        "Compound interest uses A = P(1+r)^t because each period multiplies the balance by a growth factor. Present value works in reverse by discounting future money back to what it is worth today.",
+        "You will also interpret revenue, cost, profit, break-even, supply, and demand. Revenue is often price times quantity, cost may include fixed and variable parts, and profit is revenue minus cost."
+      ],
+      "business-math-analyst": [
+        "The final badge combines the full workshop: number systems, operations, algebra, functions, graphing, systems of equations, and finance applications.",
+        "You will need to select the right model, substitute values accurately, solve equations, and interpret the result in context. The goal is not only calculation but business meaning.",
+        "A strong business math analyst can explain whether a number represents a price, quantity, cost, revenue, profit, interest amount, present value, growth rate, or break-even point."
+      ]
+    };
+
+    BADGES.forEach(badge => {
+      if (CONCEPT_DETAILS[badge.id]) badge.concepts = CONCEPT_DETAILS[badge.id];
+    });
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function fmt(value) {
+      if (typeof value === "number" && Number.isFinite(value)) {
+        return Number.isInteger(value) ? String(value) : String(Number(value.toFixed(3)));
+      }
+      return String(value);
+    }
+
+    function gcd(a, b) {
+      a = Math.abs(a);
+      b = Math.abs(b);
+      while (b) [a, b] = [b, a % b];
+      return a || 1;
+    }
+
+    function simplifyFraction(n, d) {
+      const sign = d < 0 ? -1 : 1;
+      n *= sign;
+      d *= sign;
+      const g = gcd(n, d);
+      return `${n / g}/${d / g}`;
+    }
+
+    function displayMathValue(value) {
+      if (typeof value === "number") return value;
+      const text = String(value).trim();
+      if (text.startsWith("\u221A")) return Math.sqrt(Number(text.slice(1)));
+      if (text.includes("/")) {
+        const [n, d] = text.split("/").map(Number);
+        return n / d;
+      }
+      if (text === "\u03C0") return Math.PI;
+      return Number(text);
+    }
+
+    function makeQuestion(badgeId, type, prompt, answers, options, correctIndex, difficulty, explanation) {
+      const suffix = questionSerial++;
+      return {
+        id: `${badgeId}-${suffix}`,
+        badgeId,
+        type,
+        prompt,
+        answers: Array.isArray(answers) ? answers.map(String) : [String(answers)],
+        options: options || null,
+        correctIndex: Number.isInteger(correctIndex) ? correctIndex : null,
+        difficulty,
+        points: POINTS[difficulty],
+        explanation
+      };
+    }
+
+    function mc(badgeId, prompt, options, correctIndex, difficulty, explanation) {
+      return makeQuestion(badgeId, "multiple-choice", prompt, options[correctIndex], options, correctIndex, difficulty, explanation);
+    }
+
+    function sa(badgeId, prompt, answers, difficulty, explanation) {
+      return makeQuestion(badgeId, "short-answer", prompt, answers, null, null, difficulty, explanation);
+    }
+
+    let questionSerial = 1;
+
+    function createQuestionPool() {
+      questionSerial = 1;
+      return [
+        ...numberSystems(),
+        ...operations(),
+        ...fractions(),
+        ...exponents(),
+        ...notation(),
+        ...summation(),
+        ...polynomials(),
+        ...algebra(),
+        ...functionsBadge(),
+        ...graphs(),
+        ...linear(),
+        ...quadratics(),
+        ...curves(),
+        ...systems(),
+        ...finance(),
+        ...finalBoss()
+      ];
+    }
+
+    function numberSystems() {
+      const id = BADGES[0].id;
+      const q = [];
+      const classify = [
+        [7, "natural number", "Easy"], [-4, "integer", "Easy"], ["3/5", "rational number", "Easy"], ["\u221A2", "irrational number", "Medium"],
+        [0, "integer", "Medium"], ["-9/2", "rational number", "Medium"], ["pi", "irrational number", "Medium"], ["2.75", "rational number", "Medium"]
+      ];
+      classify.forEach(([value, answer, diff]) => q.push(mc(id, `Which classification best fits ${value}?`, ["natural number", "integer", "rational number", "irrational number"], ["natural number", "integer", "rational number", "irrational number"].indexOf(answer), diff, `${value} belongs to the ${answer} category in the real number system.`)));
+      [[-7, -3], [4, -2], ["1/3", "1/4"], ["\u221A9", 2], [-1.5, -1.05], [0, -0.2]].forEach(([a, b], i) => {
+        const av = displayMathValue(a);
+        const bv = displayMathValue(b);
+        const symbol = av > bv ? ">" : av < bv ? "<" : "=";
+        q.push(mc(id, `Choose the true statement on the number line: ${a} ? ${b}`, [`${a} < ${b}`, `${a} > ${b}`, `${a} = ${b}`, `${b} is not real`], symbol === "<" ? 0 : symbol === ">" ? 1 : 2, i < 2 ? "Easy" : "Medium", `Values farther right on the number line are greater. The true relation is ${a} ${symbol} ${b}.`));
+      });
+      [-12, -3.5, 0, 8, "-6/2", 14].forEach((value, i) => {
+        const numeric = typeof value === "string" ? -3 : value;
+        q.push(sa(id, `What is the absolute value of ${value}?`, Math.abs(numeric), i < 3 ? "Easy" : "Medium", `Absolute value is distance from zero, so it is never negative.`));
+      });
+      [
+        ["Every rational number is a real number.", true],
+        ["Every real number is rational.", false],
+        ["Irrational numbers cannot be written as a ratio of integers.", true],
+        ["Natural numbers include negative integers.", false]
+      ].forEach(([statement, truth], i) => q.push(mc(id, statement, ["True", "False"], truth ? 0 : 1, i < 2 ? "Medium" : "Hard", truth ? "The statement matches the real number hierarchy." : "The statement reverses or overextends a number-system definition.")));
+      q.push(sa(id, "A business account shows balances -120, 45, -30, and 75. How many of these balances are integers?", 4, "Easy", "All four listed balances are whole-number positives, negatives, or zero-type integer values."));
+      q.push(mc(id, "Which set is ordered from least to greatest?", ["-8, -3, 0, 5", "0, -3, 5, -8", "5, 0, -3, -8", "-3, -8, 0, 5"], 0, "Medium", "Negative numbers farther left are smaller, then zero, then positive numbers."));
+      return q;
+    }
+
+    function operations() {
+      const id = BADGES[1].id;
+      const q = [];
+      [[8, -3], [-6, -5], [12, 4], [-21, 7], [0, 9], [15, -3]].forEach(([a, b], i) => {
+        q.push(sa(id, `Compute ${a} + (${b}).`, a + b, i < 3 ? "Easy" : "Medium", "Adding a negative is the same as moving left on the number line."));
+      });
+      [[7, -4], [-9, 2], [5, 11], [-3, -8]].forEach(([a, b], i) => {
+        q.push(sa(id, `Compute ${a} - (${b}).`, a - b, i < 2 ? "Easy" : "Medium", "Subtraction is adding the opposite."));
+      });
+      [[-4, 6], [-7, -3], [9, -5], [11, 4]].forEach(([a, b], i) => {
+        q.push(sa(id, `Compute ${a} x ${b}.`, a * b, i < 2 ? "Easy" : "Medium", "Products with one negative factor are negative; products with two negative factors are positive."));
+      });
+      [
+        ["What is 5 divided by 0?", "undefined", ["0", "1", "undefined", "5"], 2, "Medium", "Division by zero is undefined because no number times 0 equals 5."],
+        ["Which property is shown by 4 + 9 = 9 + 4?", "commutative property", ["Identity property", "Commutative property", "Inverse property", "Distributive property"], 1, "Easy", "The order of addition changed, so this is the commutative property."],
+        ["Which property is shown by 6(10 + 2) = 60 + 12?", "distributive property", ["Commutative property", "Identity property", "Inverse property", "Distributive property"], 3, "Easy", "Multiplication is distributed over addition."],
+        ["Which property is shown by x + 0 = x?", "identity property", ["Identity property", "Inverse property", "Distributive property", "Associative property"], 0, "Easy", "Zero is the additive identity."],
+        ["Which property is shown by 8 + (-8) = 0?", "inverse property", ["Commutative property", "Identity property", "Inverse property", "Closure property"], 2, "Medium", "A number plus its additive inverse equals 0."]
+      ].forEach(([prompt, , options, correct, diff, exp]) => q.push(mc(id, prompt, options, correct, diff, exp)));
+      q.push(sa(id, "Compute 4 + 3 x 5.", 19, "Medium", "Order of operations performs multiplication before addition."));
+      q.push(sa(id, "Compute (4 + 3) x 5.", 35, "Medium", "Parentheses are completed before multiplication."));
+      q.push(sa(id, "A cost changes by -15 dollars, then by +40 dollars. What is the net change?", 25, "Easy", "Add the signed changes: -15 + 40 = 25."));
+      return q;
+    }
+
+    function fractions() {
+      const id = BADGES[2].id;
+      const q = [];
+      [[2, 4], [9, 12], [15, 35], [18, 24], [21, 28]].forEach(([n, d], i) => {
+        q.push(sa(id, `Simplify ${n}/${d}.`, simplifyFraction(n, d), i < 2 ? "Easy" : "Medium", `Divide numerator and denominator by their greatest common factor, ${gcd(n, d)}.`));
+      });
+      [[1, 4, 1, 2], [2, 3, 1, 6], [3, 5, 1, 10], [5, 8, 1, 4]].forEach(([a, b, c, d], i) => {
+        q.push(sa(id, `Compute ${a}/${b} + ${c}/${d}.`, simplifyFraction(a * d + c * b, b * d), i < 2 ? "Medium" : "Hard", "Use a common denominator, add numerators, then simplify."));
+      });
+      [[3, 4, 8, 9], [5, 6, 3, 10], [7, 8, 4, 21], [2, 5, 15, 16]].forEach(([a, b, c, d], i) => {
+        q.push(sa(id, `Compute ${a}/${b} x ${c}/${d}.`, simplifyFraction(a * c, b * d), i < 2 ? "Medium" : "Hard", "Multiply numerators and denominators, then simplify."));
+      });
+      [[3, 5], [7, 11], [10, 3], [-4, 9]].forEach(([n, d], i) => {
+        q.push(sa(id, `What is the reciprocal of ${n}/${d}?`, `${d}/${n}`, i < 2 ? "Easy" : "Medium", "The reciprocal switches numerator and denominator."));
+      });
+      [
+        ["A price-to-earnings ratio is 18:3. Simplify the ratio.", "6:1", "Medium", "Divide both parts of the ratio by 3."],
+        ["A department has 12 analysts and 18 associates. Simplify the analyst-to-associate ratio.", "2:3", "Medium", "Divide both terms by their greatest common factor, 6."],
+        ["Which fraction is equivalent to 0.25?", ["1/4", "1/3", "2/5", "3/8"], 0, "Easy", "0.25 is one quarter."],
+        ["Which is larger: 3/8 or 2/5?", ["3/8", "2/5", "They are equal", "Cannot compare"], 1, "Medium", "3/8 = 0.375 and 2/5 = 0.4."]
+      ].forEach(item => Array.isArray(item[1]) ? q.push(mc(id, item[0], item[1], item[2], item[3], item[4])) : q.push(sa(id, item[0], item[1], item[2], item[3])));
+      q.push(sa(id, "A budget uses 2/5 for marketing and 1/4 for operations. What fraction is used in total?", "13/20", "Hard", "Use denominator 20: 8/20 + 5/20 = 13/20."));
+      q.push(sa(id, "A team completes 3/7 of a project. What fraction remains?", "4/7", "Easy", "Subtract from one whole: 1 - 3/7 = 4/7."));
+      return q;
+    }
+
+    function exponents() {
+      const id = BADGES[3].id;
+      const q = [];
+      [[2, 0], [7, 0], [5, 3], [3, 4], [10, 5]].forEach(([base, exp], i) => {
+        q.push(sa(id, `Evaluate ${base}^${exp}.`, Math.pow(base, exp), i < 2 ? "Easy" : "Medium", exp === 0 ? "Any nonzero base raised to the zero power equals 1." : "An exponent tells how many times the base is multiplied by itself."));
+      });
+      [[2, -3, "1/8"], [5, -2, "1/25"], [10, -4, "1/10000"], [3, -1, "1/3"]].forEach(([base, exp, ans], i) => {
+        q.push(sa(id, `Rewrite ${base}^${exp} with a positive exponent.`, ans, i < 2 ? "Medium" : "Hard", "A negative exponent moves the base to the denominator with a positive exponent."));
+      });
+      [[2, 3, 4], [5, 2, 6], [10, 4, 2], [3, 5, 1]].forEach(([base, a, b], i) => {
+        q.push(sa(id, `Simplify ${base}^${a} x ${base}^${b} as a single power.`, `${base}^${a + b}`, i < 2 ? "Medium" : "Hard", "When multiplying powers with the same base, add exponents."));
+      });
+      [[2, 3, 4], [5, 2, 3], [10, 2, 5], [3, 4, 2]].forEach(([base, a, b], i) => {
+        q.push(sa(id, `Simplify (${base}^${a})^${b} as a single power.`, `${base}^${a * b}`, i < 2 ? "Medium" : "Hard", "For a power raised to a power, multiply exponents."));
+      });
+      [
+        ["10^3 represents which value?", ["30", "100", "1000", "10000"], 2, "Easy", "10^3 is 10 x 10 x 10 = 1000."],
+        ["Which equals 1/100?", ["10^-2", "10^2", "2^-10", "100^1"], 0, "Medium", "10^-2 = 1/10^2 = 1/100."],
+        ["A value grows by a factor of 2 for 4 periods. What multiplier is used?", "16", "Medium", "Repeated doubling for four periods is 2^4 = 16."],
+        ["A decimal 0.00001 equals which power of 10?", "10^-5", "Hard", "Moving the decimal five places gives 1 x 10^-5."]
+      ].forEach(item => Array.isArray(item[1]) ? q.push(mc(id, item[0], item[1], item[2], item[3], item[4])) : q.push(sa(id, item[0], item[1], item[2], item[3])));
+      q.push(mc(id, "Which rule is correct?", ["a^m x a^n = a^(mn)", "(a^m)^n = a^(m+n)", "a^m x a^n = a^(m+n)", "a^0 = 0"], 2, "Challenge", "The product of powers rule adds exponents when bases match."));
+      return q;
+    }
+
+    function notation() {
+      const id = BADGES[4].id;
+      const q = [];
+      q.push(sa(id, "Compute 6 + 2(9 - 4).", 16, "Easy", "Parentheses first, then multiplication, then addition."));
+      q.push(sa(id, "Compute | -18 | + | 5 |.", 23, "Easy", "Absolute values are distances from zero: 18 + 5."));
+      q.push(sa(id, "Compute 5!.", 120, "Medium", "5! = 5 x 4 x 3 x 2 x 1."));
+      q.push(sa(id, "Compute 4! / 3!.", 4, "Medium", "4! / 3! = (4 x 3 x 2 x 1)/(3 x 2 x 1) = 4."));
+      [["4,500", "4.5 x 10^3"], ["0.0062", "6.2 x 10^-3"], ["72,000,000", "7.2 x 10^7"], ["0.00084", "8.4 x 10^-4"]].forEach(([value, ans], i) => {
+        q.push(sa(id, `Write ${value} in scientific notation.`, ans, i < 2 ? "Medium" : "Hard", "Scientific notation uses a number from 1 up to 10 times a power of 10."));
+      });
+      [[2, 11], [4, 25], [7, 63], [10, 120]].forEach(([idx, val], i) => {
+        q.push(sa(id, `If x_${idx} = ${val}, what is the value of x_${idx}?`, val, "Easy", "The subscript labels a specific item in a sequence or data set."));
+      });
+      [
+        ["In revenue R = p1x1 + p2x2, what does x2 usually label?", ["The first product quantity", "The second product quantity", "The total revenue", "The tax rate"], 1, "Medium", "The subscript 2 distinguishes the second product's quantity."],
+        ["Which expression should be done first in 9 - 3^2 + 4?", ["9 - 3", "3^2", "2 + 4", "9 + 4"], 1, "Easy", "Exponents are evaluated before addition and subtraction."],
+        ["Compute 9 - 3^2 + 4.", "4", "Medium", "3^2 = 9, so 9 - 9 + 4 = 4."],
+        ["Compute | -7 + 2 |.", "5", "Medium", "Evaluate inside the absolute value first: -7 + 2 = -5, then |-5| = 5."],
+        ["What does n! mean?", ["n divided by n", "n added to itself", "Product of positive integers from n down to 1", "n raised to the zero power"], 2, "Easy", "Factorial notation multiplies descending positive integers."]
+      ].forEach(item => Array.isArray(item[1]) ? q.push(mc(id, item[0], item[1], item[2], item[3], item[4])) : q.push(sa(id, item[0], item[1], item[2], item[3])));
+      return q;
+    }
+
+    function summation() {
+      const id = BADGES[5].id;
+      const q = [];
+      [[1, 4], [1, 5], [2, 6], [3, 7]].forEach(([start, end], i) => {
+        const sum = Array.from({ length: end - start + 1 }, (_, k) => start + k).reduce((a, b) => a + b, 0);
+        q.push(sa(id, `Compute the summation of i from ${start} to ${end}.`, sum, i < 2 ? "Easy" : "Medium", "Add each integer value of the index across the stated range."));
+      });
+      [[1, 3], [1, 4], [2, 5], [3, 6]].forEach(([start, end], i) => {
+        let sum = 0;
+        for (let x = start; x <= end; x++) sum += x * x;
+        q.push(sa(id, `Compute the summation of i^2 from i=${start} to ${end}.`, sum, i < 2 ? "Medium" : "Hard", "Square each index value, then add the results."));
+      });
+      [[3, 4], [5, 6], [8, 5], [10, 7]].forEach(([value, count], i) => {
+        q.push(sa(id, `Compute the summation of ${value} from i=1 to ${count}.`, value * count, i < 2 ? "Easy" : "Medium", "A constant added repeatedly equals the constant times the number of terms."));
+      });
+      [
+        ["If sales by region are 10, 14, 9, and 17, what is total sales?", "50", "Easy", "A summation adds the regional values."],
+        ["What does the index i do in summation notation?", ["Names the final answer", "Counts through the terms being added", "Always equals zero", "Means divide by i"], 1, "Easy", "The index tracks the values substituted into the expression."],
+        ["Compute 2 + 4 + 6 + 8 using summation thinking.", "20", "Easy", "Add the four terms in the series."],
+        ["A store has daily transactions 40, 55, 60, 45, 50. What is the weekly total?", "250", "Medium", "The weekly total is the sum of the five daily values."],
+        ["For x1=6, x2=8, x3=10, compute the summation of x_i from i=1 to 3.", "24", "Medium", "Add x1, x2, and x3: 6 + 8 + 10."]
+      ].forEach(item => Array.isArray(item[1]) ? q.push(mc(id, item[0], item[1], item[2], item[3], item[4])) : q.push(sa(id, item[0], item[1], item[2], item[3])));
+      q.push(sa(id, "Compute the summation of (2i + 1) from i=1 to 4.", 24, "Hard", "Terms are 3, 5, 7, and 9; their sum is 24."));
+      q.push(sa(id, "A manager sums profit p_i for 6 stores. If each store earns 12,000, what is total profit?", 72000, "Medium", "The constant 12,000 is added 6 times."));
+      q.push(mc(id, "Which notation represents adding x1 through x5?", ["sum x_i for i=1 to 5", "x_5 - x_1", "x^5", "5/x"], 0, "Medium", "Summation notation compactly represents adding indexed terms."));
+      return q;
+    }
+
+    function polynomials() {
+      const id = BADGES[6].id;
+      const q = [];
+      [
+        ["7x^3", "monomial"], ["4x^2 + 3x - 8", "polynomial"], ["9", "monomial"], ["x^4 - 2x^2 + 1", "polynomial"]
+      ].forEach(([expr, ans], i) => q.push(mc(id, `Classify ${expr}.`, ["monomial", "polynomial", "not an algebraic expression", "matrix"], ans === "monomial" ? 0 : 1, i < 2 ? "Easy" : "Medium", "A monomial has one term; a polynomial is a sum of one or more monomial terms.")));
+      [["3x + 4x", "7x"], ["8y - 2y + y", "7y"], ["5a^2 + 3a^2", "8a^2"], ["9m - 12m", "-3m"]].forEach(([expr, ans], i) => {
+        q.push(sa(id, `Combine like terms: ${expr}.`, ans, i < 2 ? "Easy" : "Medium", "Like terms have matching variable parts, so their coefficients combine."));
+      });
+      [[1, 3, 2, 5], [2, 1, 3, 4], [3, -2, 1, 6], [5, 1, -2, 3]].forEach(([a, b, c, d], i) => {
+        const ac = a * c;
+        const mid = a * d + b * c;
+        const bd = b * d;
+        const ans = `${ac}x^2 ${mid >= 0 ? "+" : "-"} ${Math.abs(mid)}x ${bd >= 0 ? "+" : "-"} ${Math.abs(bd)}`;
+        q.push(sa(id, `Expand (${a}x + ${b})(${c}x + ${d}).`, ans, i < 2 ? "Hard" : "Challenge", "FOIL multiplies first, outer, inner, and last terms, then combines the middle terms."));
+      });
+      [
+        ["What is the degree of 5x^4 - 3x + 8?", "4", "Easy", "The degree is the highest exponent with a nonzero coefficient."],
+        ["What is the degree of 6x^2y^3?", "5", "Hard", "For a monomial with multiple variables, add exponents: 2 + 3 = 5."],
+        ["Factor x^2 + 5x + 6.", "(x + 2)(x + 3)", "Hard", "The factors of 6 that add to 5 are 2 and 3."],
+        ["Factor x^2 - 9.", "(x - 3)(x + 3)", "Medium", "This is a difference of squares."],
+        ["Which expression is a polynomial?", ["x^-1 + 2", "\u221Ax + 4", "3x^2 - x + 7", "1/x"], 2, "Medium", "Polynomial variable exponents are nonnegative whole numbers."]
+      ].forEach(item => Array.isArray(item[1]) ? q.push(mc(id, item[0], item[1], item[2], item[3], item[4])) : q.push(sa(id, item[0], item[1], item[2], item[3])));
+      q.push(sa(id, "Expand (x + 6)(x - 6).", "x^2 - 36", "Medium", "This is a difference of squares: x^2 - 6^2."));
+      q.push(sa(id, "Combine 2x^2 + 5x - 3x^2 + 4.", "-x^2 + 5x + 4", "Hard", "Combine the x^2 terms and keep unlike terms separate."));
+      return q;
+    }
+
+    function algebra() {
+      const id = BADGES[7].id;
+      const q = [];
+      [[3, 5, 20], [4, -7, 9], [2, 11, 31], [6, 4, 40]].forEach(([a, b, c], i) => {
+        q.push(sa(id, `Solve for x: ${a}x ${b >= 0 ? "+" : "-"} ${Math.abs(b)} = ${c}.`, (c - b) / a, i < 2 ? "Medium" : "Hard", "Undo addition or subtraction first, then divide by the coefficient of x."));
+      });
+      [[2, 3, 5, 1], [4, 1, 2, 7], [3, -2, 5, 8], [6, 5, 2, -1]].forEach(([a, b, c, d], i) => {
+        const ans = (d - b) / (a - c);
+        q.push(sa(id, `Solve for x: ${a}x ${b >= 0 ? "+" : "-"} ${Math.abs(b)} = ${c}x ${d >= 0 ? "+" : "-"} ${Math.abs(d)}.`, ans, "Hard", "Move x terms to one side and constants to the other, then divide."));
+      });
+      [
+        ["Factor 3x + 12.", "3(x + 4)", "Medium", "The greatest common factor is 3."],
+        ["Factor 5x^2 - 10x.", "5x(x - 2)", "Hard", "The greatest common factor is 5x."],
+        ["Solve x/4 = 9.", "36", "Easy", "Multiply both sides by 4."],
+        ["Solve 2(x + 5) = 18.", "4", "Medium", "Divide by 2 to get x + 5 = 9, so x = 4."],
+        ["Solve 7 - x = 12.", "-5", "Medium", "Subtract 7 from both sides, then multiply by -1."],
+        ["Which step correctly starts solving 5x - 8 = 17?", ["Add 8 to both sides", "Subtract 8 from both sides", "Divide both sides by -8", "Set x = 8"], 0, "Easy", "The inverse of subtracting 8 is adding 8."],
+        ["A service fee is 25 plus 4 per unit. If the bill is 89, how many units were used?", "16", "Medium", "Solve 25 + 4x = 89, so 4x = 64 and x = 16."],
+        ["Solve |x| = 6. How many real solutions are there?", "2", "Medium", "Both x = 6 and x = -6 have absolute value 6."],
+        ["Solve x^2 = 49. Give the positive solution.", "7", "Easy", "The positive square root of 49 is 7."],
+        ["A break-even equation is 12x = 300 + 6x. Solve for x.", "50", "Hard", "Subtract 6x from both sides: 6x = 300, so x = 50."]
+      ].forEach(item => Array.isArray(item[1]) ? q.push(mc(id, item[0], item[1], item[2], item[3], item[4])) : q.push(sa(id, item[0], item[1], item[2], item[3])));
+      return q;
+    }
+
+    function functionsBadge() {
+      const id = BADGES[8].id;
+      const q = [];
+      [[2, 3], [5, -1], [-4, 7], [10, 0]].forEach(([x, b], i) => {
+        q.push(sa(id, `If f(x) = 2x ${b >= 0 ? "+" : "-"} ${Math.abs(b)}, find f(${x}).`, 2 * x + b, i < 2 ? "Easy" : "Medium", "Substitute the input value for x and evaluate."));
+      });
+      [[3, 2, 4], [5, 1, 6], [10, 3, 2], [8, 4, 5]].forEach(([p, x, fixed], i) => {
+        q.push(sa(id, `A revenue function is R(x) = ${p}x. What is R(${x})?`, p * x, "Easy", "Revenue from one product equals price times quantity."));
+        q.push(sa(id, `A cost function is C(x) = ${fixed} + ${p}x. What is C(${x})?`, fixed + p * x, "Medium", "Substitute the quantity into the cost function."));
+      });
+      [
+        ["In y = f(x), which variable is usually independent?", ["x", "y", "f", "Both x and y"], 0, "Easy", "x is usually the input or independent variable."],
+        ["In demand q = D(p), which variable is the input?", ["q", "D", "p", "None"], 2, "Medium", "The notation D(p) means demand is written as a function of price p."],
+        ["For R = p1x1 + p2x2, what does p1x1 represent?", ["Revenue from product 1", "Revenue from product 2", "Total cost", "Average price"], 0, "Medium", "Price times quantity for the first product gives product 1 revenue."],
+        ["If f(2)=7 and f(5)=13, which ordered pair must be on the graph?", ["(7, 2)", "(2, 7)", "(5, 7)", "(13, 5)"], 1, "Medium", "f(2)=7 means input 2 has output 7, giving point (2, 7)."],
+        ["A function can assign one input to how many outputs?", ["Exactly one", "At least two", "No outputs", "Only negative outputs"], 0, "Easy", "A function gives each input exactly one output."],
+        ["If P(q)=100-4q, find P(6).", "76", "Medium", "Substitute q = 6: 100 - 24 = 76."],
+        ["If profit is pi(x)=R(x)-C(x), R(20)=500, and C(20)=360, what is pi(20)?", "140", "Medium", "Profit equals revenue minus cost."],
+        ["If g(a,b)=2a+3b, find g(4,5).", "23", "Hard", "Substitute both inputs: 2(4)+3(5)=8+15=23."],
+        ["Which notation best represents quantity depending on price?", ["p = Q", "Q(p)", "p/Q", "Q + p"], 1, "Easy", "Q(p) reads quantity as a function of price."],
+        ["If f(x)=x^2-1, find f(-3).", "8", "Medium", "(-3)^2 - 1 = 9 - 1 = 8."]
+      ].forEach(item => Array.isArray(item[1]) ? q.push(mc(id, item[0], item[1], item[2], item[3], item[4])) : q.push(sa(id, item[0], item[1], item[2], item[3])));
+      return q.slice(0, 22);
+    }
+
+    function graphs() {
+      const id = BADGES[9].id;
+      const q = [];
+      [
+        [[3, 4], "Quadrant I"], [[-2, 5], "Quadrant II"], [[-6, -1], "Quadrant III"], [[8, -3], "Quadrant IV"],
+        [[0, 7], "y-axis"], [[5, 0], "x-axis"]
+      ].forEach(([pt, ans], i) => q.push(mc(id, `Where is the point (${pt[0]}, ${pt[1]}) located?`, ["Quadrant I", "Quadrant II", "Quadrant III", "Quadrant IV", "x-axis", "y-axis"], ["Quadrant I", "Quadrant II", "Quadrant III", "Quadrant IV", "x-axis", "y-axis"].indexOf(ans), i < 4 ? "Easy" : "Medium", "The signs of x and y determine the quadrant; a zero coordinate places the point on an axis.")));
+      [[1, 3], [2, 5], [3, 7], [4, 9]].forEach(([x, y], i) => {
+        q.push(sa(id, `A table includes input x=${x} and output y=${y}. Write the ordered pair.`, `(${x}, ${y})`, "Easy", "An ordered pair is written as (input, output), or (x, y)."));
+      });
+      [
+        ["What is the origin?", ["(1, 1)", "(0, 0)", "(0, 1)", "(1, 0)"], 1, "Easy", "The origin is where the axes cross."],
+        ["When graphing y = 2x + 1, what is y when x = 0?", "1", "Easy", "Substitute x=0 into y = 2x + 1."],
+        ["Which point is on y = x + 4?", ["(1, 4)", "(2, 6)", "(4, 1)", "(0, -4)"], 1, "Medium", "For x=2, y=2+4=6."],
+        ["Which coordinate is listed first in an ordered pair?", ["x-coordinate", "y-coordinate", "slope", "quadrant"], 0, "Easy", "Ordered pairs are written (x, y)."],
+        ["A graph of a function from a table should plot what?", ["Only x-values", "Only y-values", "Each input-output pair", "Only the largest value"], 2, "Easy", "Each row of a table gives one point to plot."],
+        ["If a point moves from (2,3) to (2,8), which coordinate changed?", ["x only", "y only", "both x and y", "neither"], 1, "Medium", "The x-coordinate stayed 2 while y changed from 3 to 8."],
+        ["The point (-4,0) lies on which axis?", ["x-axis", "y-axis", "neither", "both axes"], 0, "Medium", "A point with y=0 is on the x-axis."],
+        ["Which point has positive x and negative y?", ["(4,-5)", "(-4,5)", "(-4,-5)", "(4,5)"], 0, "Easy", "Positive x and negative y corresponds to Quadrant IV."],
+        ["If the table has x: 0,1,2 and y: 3,6,9, what is the point for x=2?", "(2, 9)", "Easy", "Match x=2 with its output y=9."]
+      ].forEach(item => Array.isArray(item[1]) ? q.push(mc(id, item[0], item[1], item[2], item[3], item[4])) : q.push(sa(id, item[0], item[1], item[2], item[3])));
+      q.push(sa(id, "For y = -x + 5, what point is produced when x = 3?", "(3, 2)", "Medium", "Substitute x=3 to get y=2, so the point is (3, 2)."));
+      q.push(mc(id, "A vertical line fails the function test when it crosses a graph how many times?", ["Zero", "One", "More than one", "Exactly one always"], 2, "Hard", "A graph is not a function if one input has multiple outputs."));
+      return q;
+    }
+
+    function linear() {
+      const id = BADGES[10].id;
+      const q = [];
+      [[[0, 1], [2, 5]], [[1, 3], [4, 12]], [[-2, 4], [2, -4]], [[3, 7], [6, 7]]].forEach(([p1, p2], i) => {
+        const slope = (p2[1] - p1[1]) / (p2[0] - p1[0]);
+        q.push(sa(id, `Find the slope between (${p1[0]}, ${p1[1]}) and (${p2[0]}, ${p2[1]}).`, slope, i < 2 ? "Medium" : "Hard", "Slope is change in y divided by change in x."));
+      });
+      [
+        ["In y = 3x - 8, what is the slope?", "3", "Easy", "Slope-intercept form is y = mx + b, where m is slope."],
+        ["In y = -2x + 5, what is the y-intercept?", "5", "Easy", "The y-intercept is b in y = mx + b."],
+        ["Which line is parallel to y = 4x + 1?", ["y = 4x - 7", "y = -4x + 1", "y = (1/4)x", "y = x + 4"], 0, "Medium", "Parallel nonvertical lines have the same slope."],
+        ["A line has slope 6 and y-intercept -2. Write it in slope-intercept form.", "y = 6x - 2", "Medium", "Use y = mx + b with m=6 and b=-2."],
+        ["A revenue function R(x)=15x is linear. What is the slope?", "15", "Easy", "Each additional unit adds 15 dollars of revenue."],
+        ["A fixed cost of 200 and variable cost 8 per unit gives which cost function?", ["C(x)=200x+8", "C(x)=200+8x", "C(x)=8-200x", "C(x)=200/8x"], 1, "Medium", "Linear cost equals fixed cost plus variable cost per unit times x."],
+        ["If y changes from 10 to 22 while x changes from 2 to 5, what is the slope?", "4", "Medium", "The change in y is 12 and the change in x is 3, so slope is 4."],
+        ["Which slope indicates a decreasing line?", ["5", "0", "-3", "undefined only"], 2, "Easy", "A negative slope decreases from left to right."],
+        ["What is the slope of a horizontal line?", "0", "Easy", "Horizontal lines have no vertical change, so slope is 0."],
+        ["Solve for the x-intercept of y = 2x - 10.", "5", "Hard", "Set y=0, then solve 0 = 2x - 10."],
+        ["Demand is p = 80 - 2q. What does the slope -2 mean?", ["Price rises 2 per unit", "Price falls 2 per additional unit", "Quantity is always 2", "Fixed cost is 80"], 1, "Medium", "The negative slope means price decreases by 2 for each additional unit q."],
+        ["Find b if y = 5x + b passes through (2, 17).", "7", "Hard", "Substitute 17 = 5(2) + b, so b = 7."]
+      ].forEach(item => Array.isArray(item[1]) ? q.push(mc(id, item[0], item[1], item[2], item[3], item[4])) : q.push(sa(id, item[0], item[1], item[2], item[3])));
+      q.push(sa(id, "Write the line through (0,4) with slope -3.", "y = -3x + 4", "Medium", "A point with x=0 gives the y-intercept."));
+      q.push(mc(id, "In general business interpretation, slope usually represents what?", ["Rate of change", "Starting value only", "Maximum profit", "A quadrant"], 0, "Easy", "Slope measures how the output changes when the input increases by one unit."));
+      return q;
+    }
+
+    function quadratics() {
+      const id = BADGES[11].id;
+      const q = [];
+      [[1, -5, 6], [1, -7, 10], [1, 3, 2], [1, 0, -16]].forEach(([a, b, c], i) => {
+        const roots = [];
+        for (let x = -20; x <= 20; x++) if (a * x * x + b * x + c === 0) roots.push(x);
+        q.push(sa(id, `Solve ${a === 1 ? "" : a}x^2 ${b >= 0 ? "+" : "-"} ${Math.abs(b)}x ${c >= 0 ? "+" : "-"} ${Math.abs(c)} = 0. List the roots.`, roots.join(", "), i < 2 ? "Hard" : "Challenge", "Factor the quadratic or use equivalent solving methods to find x-values that make it zero."));
+      });
+      [
+        ["What shape is the graph of a quadratic function?", ["Line", "Parabola", "Circle", "Histogram"], 1, "Easy", "Quadratic functions graph as parabolas."],
+        ["Does y = x^2 + 3 open up or down?", ["Up", "Down", "Neither", "Both"], 0, "Easy", "A positive leading coefficient opens upward."],
+        ["Does y = -2x^2 + 4 open up or down?", ["Up", "Down", "Neither", "Both"], 1, "Easy", "A negative leading coefficient opens downward."],
+        ["What is the vertex of y = (x - 3)^2 + 5?", "(3, 5)", "Medium", "Vertex form y=(x-h)^2+k has vertex (h,k)."],
+        ["What is the vertex of y = (x + 2)^2 - 7?", "(-2, -7)", "Medium", "x+2 means h=-2; k=-7."],
+        ["Evaluate f(x)=x^2-4x+1 at x=3.", "-2", "Medium", "9 - 12 + 1 = -2."],
+        ["Find the axis of symmetry for y = (x - 6)^2 + 1.", "x = 6", "Medium", "The axis of symmetry is x=h in vertex form."],
+        ["Which quadratic has roots 2 and 5?", ["(x-2)(x-5)=0", "(x+2)(x+5)=0", "(x-2)(x+5)=0", "x^2+10=0"], 0, "Hard", "If roots are 2 and 5, factors are x-2 and x-5."],
+        ["Solve x^2 - 25 = 0. List the roots.", "-5, 5", "Medium", "This is a difference of squares: (x-5)(x+5)=0."],
+        ["A profit model P(x)=-(x-4)^2+30 has maximum profit at what x?", "4", "Medium", "The vertex gives the maximum because the parabola opens downward."],
+        ["What is the degree of a quadratic function?", "2", "Easy", "Quadratic means the highest power is 2."],
+        ["How many real roots can a quadratic have at most?", "2", "Easy", "A degree-2 equation has at most two real roots."]
+      ].forEach(item => Array.isArray(item[1]) ? q.push(mc(id, item[0], item[1], item[2], item[3], item[4])) : q.push(sa(id, item[0], item[1], item[2], item[3])));
+      q.push(sa(id, "Find f(4) for f(x)=2x^2.", "32", "Easy", "2(4^2)=2(16)=32."));
+      q.push(mc(id, "If a quadratic opens downward, its vertex is a", ["minimum", "maximum", "slope", "y-axis"], 1, "Medium", "A downward-opening parabola has a highest point at the vertex."));
+      return q;
+    }
+
+    function curves() {
+      const id = BADGES[12].id;
+      const q = [];
+      const data = [
+        ["What is the degree of 4x^5 - x^2 + 9?", "5", "Easy", "The degree is the highest exponent."],
+        ["What is the degree of 7x^3 + 2x^2 - x + 1?", "3", "Easy", "The highest power is 3."],
+        ["Which function shows exponential growth?", ["y=3x+2", "y=2(1.08)^x", "y=-x^2", "y=8"], 1, "Medium", "A constant base greater than 1 raised to x indicates exponential growth."],
+        ["Which function shows exponential decay?", ["y=100(0.9)^t", "y=100(1.1)^t", "y=100t", "y=t^2"], 0, "Medium", "A base between 0 and 1 indicates exponential decay."],
+        ["If A(t)=500(1.04)^t, what is the initial amount?", "500", "Easy", "The initial amount is the coefficient when t=0."],
+        ["If A(t)=200(0.85)^t, what percent remains each period?", "85", "Medium", "The base 0.85 means 85% remains after each period."],
+        ["Evaluate 3^4.", "81", "Easy", "3 x 3 x 3 x 3 = 81."],
+        ["A cubic polynomial has degree what?", "3", "Easy", "Cubic means degree 3."],
+        ["Which has the fastest long-run growth?", ["Linear", "Constant", "Exponential with base 1.2", "Horizontal"], 2, "Medium", "Exponential growth eventually outpaces linear growth."],
+        ["If sales grow 10% per year, what multiplier is used each year?", "1.10", "Medium", "A 10% increase means multiply by 1 + 0.10 = 1.10."],
+        ["If customers decay 12% per month, what multiplier is used each month?", "0.88", "Medium", "A 12% decrease means multiply by 1 - 0.12 = 0.88."],
+        ["For f(x)=x^4-2x, what is f(2)?", "12", "Hard", "2^4 - 2(2) = 16 - 4 = 12."],
+        ["Which expression is polynomial rather than exponential?", ["2^x", "5(1.03)^x", "x^3 - 4x", "10(0.7)^x"], 2, "Medium", "The variable is in the base for polynomial functions, not in the exponent."],
+        ["What does an exponential growth base of 1.06 mean?", ["6% growth", "6% decay", "106% decay", "No change"], 0, "Medium", "1.06 equals 1 plus a 6% growth rate."],
+        ["What base means no exponential change?", ["0", "0.5", "1", "2"], 2, "Easy", "Multiplying by 1 each period leaves the amount unchanged."],
+        ["A model y=40(2)^t doubles how often?", ["Every period", "Every two periods", "Never", "Only at t=0"], 0, "Medium", "The base 2 means the value doubles for each one-unit increase in t."],
+        ["Find f(0) for f(x)=9(1.2)^x.", "9", "Easy", "Any nonzero base to the zero power equals 1, so f(0)=9."],
+        ["Which model might fit compound user growth?", ["P(t)=P0(1+r)^t", "P(t)=mt+b only", "P(t)=P0-r", "P(t)=0"], 0, "Hard", "Compound growth repeatedly multiplies by a growth factor."],
+        ["A polynomial with leading term -2x^6 has degree what?", "6", "Easy", "The degree is the exponent on the leading highest-power term."],
+        ["If an exponential model has base 0.72, is it growth or decay?", "decay", "Easy", "A base between 0 and 1 makes the value shrink over time."],
+        ["Which model is nonlinear?", ["y=8x+1", "y=3x", "y=x^2+2", "y=-4x+7"], 2, "Easy", "The squared term makes the model nonlinear."],
+        ["Evaluate 100(1.05)^2 to the nearest cent.", "110.25", "Hard", "1.05 squared is 1.1025, and 100 times that is 110.25."]
+      ];
+      data.forEach(item => Array.isArray(item[1]) ? q.push(mc(id, item[0], item[1], item[2], item[3], item[4])) : q.push(sa(id, item[0], item[1], item[2], item[3])));
+      return q;
+    }
+
+    function systems() {
+      const id = BADGES[13].id;
+      const q = [];
+      const data = [
+        ["Solve the system: x + y = 10 and x - y = 2. Give (x, y).", "(6, 4)", "Medium", "Add equations to get 2x=12, so x=6 and y=4."],
+        ["Solve the system: 2x + y = 9 and y = 3. Give (x, y).", "(3, 3)", "Easy", "Substitute y=3 into 2x+y=9."],
+        ["Solve: x + 2y = 11 and x = 5. Give (x, y).", "(5, 3)", "Easy", "Substitute x=5, giving 5+2y=11."],
+        ["Solve: 3x + y = 14 and x + y = 6. Give (x, y).", "(4, 2)", "Medium", "Subtract the second equation from the first to get 2x=8."],
+        ["A graphical solution to a system is the", ["y-intercept", "slope", "intersection point", "x-axis only"], 2, "Easy", "The intersection satisfies both equations."],
+        ["If two lines are parallel and distinct, how many solutions does the system have?", ["0", "1", "2", "Infinitely many"], 0, "Medium", "Distinct parallel lines never intersect."],
+        ["If two equations describe the same line, how many solutions are there?", ["0", "1", "2", "Infinitely many"], 3, "Medium", "Every point on the line satisfies both equations."],
+        ["Solve: y = x + 1 and y = 2x - 3. Give (x, y).", "(4, 5)", "Medium", "Set x+1 = 2x-3, so x=4, y=5."],
+        ["Solve: y = -x + 8 and y = x + 2. Give (x, y).", "(3, 5)", "Medium", "Set -x+8 = x+2, so 6=2x and x=3."],
+        ["Use elimination: 2x + 3y = 16 and 2x - y = 4. What is y?", "3", "Hard", "Subtract the second equation from the first to get 4y=12."],
+        ["Use substitution: x = 2y and x + y = 18. What is x?", "12", "Medium", "Substitute 2y for x: 3y=18, so y=6 and x=12."],
+        ["Break-even occurs where cost and revenue are", ["parallel", "equal", "negative", "undefined"], 1, "Easy", "Break-even means revenue equals cost."],
+        ["If R=20x and C=200+10x, what is the break-even x?", "20", "Medium", "Set 20x=200+10x, so 10x=200."],
+        ["Supply p=10+2q and demand p=40-q intersect at what q?", "10", "Hard", "Set 10+2q=40-q, so 3q=30."],
+        ["At q=10 for p=10+2q, what is p?", "30", "Easy", "Substitute q=10: p=10+20=30."],
+        ["Solve nonlinear system y=x^2 and y=4. Give x-values.", "-2, 2", "Hard", "Set x^2=4, so x=-2 or x=2."],
+        ["Solve y=x^2 and y=x+2. One solution has x=2. What is y there?", "4", "Medium", "Use y=x+2 or y=x^2 at x=2 to get 4."],
+        ["Which method replaces one variable using an equation like y=2x+1?", ["Substitution", "Elimination", "Factoring", "FOIL"], 0, "Easy", "Substitution uses one expression in place of a variable."],
+        ["Which method adds or subtracts equations to remove a variable?", ["Substitution", "Elimination", "Graph scaling", "Scientific notation"], 1, "Easy", "Elimination combines equations to cancel a variable."],
+        ["If the intersection point is (7, 9), what is the solution for x?", "7", "Easy", "The first coordinate is the x-value."],
+        ["A firm solves price and quantity from supply and demand. This is a use of what topic?", ["Systems of equations", "Factorial notation", "Absolute value only", "Subscripts only"], 0, "Easy", "Supply and demand equilibrium is modeled by a system."],
+        ["Solve: 5x + y = 21 and y = 1. What is x?", "4", "Easy", "Substitute y=1, giving 5x+1=21."]
+      ];
+      data.forEach(item => Array.isArray(item[1]) ? q.push(mc(id, item[0], item[1], item[2], item[3], item[4])) : q.push(sa(id, item[0], item[1], item[2], item[3])));
+      return q;
+    }
+
+    function finance() {
+      const id = BADGES[14].id;
+      const q = [];
+      const data = [
+        ["Simple interest on $1,000 at 6% for 2 years equals what?", "120", "Easy", "Simple interest is I=Prt=1000(0.06)(2)."],
+        ["Simple interest on $800 at 5% for 3 years equals what?", "120", "Easy", "I=Prt=800(0.05)(3)."],
+        ["Compound amount for $1,000 at 10% for 2 years is what?", "1210", "Medium", "A=P(1+r)^t=1000(1.10)^2."],
+        ["Compound amount for $500 at 4% for 2 years is what?", "540.8", "Medium", "A=500(1.04)^2=540.8."],
+        ["Present value of $110 one year from now at 10% is what?", "100", "Medium", "PV=FV/(1+r)=110/1.10."],
+        ["Present value of $1,210 two years from now at 10% is what?", "1000", "Medium", "PV=1210/(1.10)^2."],
+        ["If R(x)=25x and C(x)=400+15x, find break-even x.", "40", "Medium", "Set revenue equal to cost: 25x=400+15x."],
+        ["If fixed cost is 500 and variable cost is 12, write the cost function.", "C(x) = 500 + 12x", "Easy", "Cost equals fixed cost plus variable cost per unit times quantity."],
+        ["If price is 30 and quantity is 80, what is revenue?", "2400", "Easy", "Revenue is price times quantity."],
+        ["Demand p=100-2q. At q=15, what is p?", "70", "Easy", "Substitute q=15: 100-30=70."],
+        ["Supply p=20+3q. At q=10, what is p?", "50", "Easy", "Substitute q=10: 20+30=50."],
+        ["Supply p=10+q and demand p=50-3q. What is equilibrium q?", "10", "Hard", "Set 10+q=50-3q, so 4q=40."],
+        ["At equilibrium q=10 for p=10+q, what is p?", "20", "Easy", "Substitute q=10 into supply."],
+        ["A project costs 5,000 now and returns 6,000 later. What is the simple profit before discounting?", "1000", "Easy", "Profit before discounting is return minus cost."],
+        ["Which formula is compound interest?", ["I=Prt", "A=P(1+r)^t", "R=px only", "C=F+vx only"], 1, "Easy", "Compound interest multiplies by a growth factor each period."],
+        ["Which formula is simple interest?", ["I=Prt", "A=P(1+r)^t", "PV=FV(1+r)", "x^2+bx+c"], 0, "Easy", "Simple interest uses principal, rate, and time without compounding."],
+        ["A contribution margin is price 20 minus variable cost 12. What is the margin per unit?", "8", "Easy", "Contribution margin per unit is price minus variable cost."],
+        ["Fixed cost is 640 and contribution margin is 8. What is break-even quantity?", "80", "Medium", "Break-even quantity is fixed cost divided by contribution margin."],
+        ["A discount rate increases. Present value of a fixed future cash flow will", ["increase", "decrease", "stay the same", "be undefined"], 1, "Medium", "A higher discount rate makes future money worth less today."],
+        ["If revenue is 4,000 and cost is 3,250, what is profit?", "750", "Easy", "Profit equals revenue minus cost."],
+        ["If R=60x and C=900+30x, what is profit at x=50?", "600", "Hard", "Profit is 3000 - (900+1500) = 600."],
+        ["Which decision uses present value?", ["Comparing cash received at different times", "Naming a quadrant", "Simplifying a monomial", "Choosing a subscript"], 0, "Medium", "Present value adjusts future cash flows into today's dollars."]
+      ];
+      data.forEach(item => Array.isArray(item[1]) ? q.push(mc(id, item[0], item[1], item[2], item[3], item[4])) : q.push(sa(id, item[0], item[1], item[2], item[3])));
+      return q;
+    }
+
+    function finalBoss() {
+      const id = BADGES[15].id;
+      const q = [];
+      const data = [
+        ["A firm sells x units at $30 each with cost C=500+10x. Write profit P(x).", "P(x) = 20x - 500", "Hard", "Profit equals revenue minus cost: 30x - (500+10x)."],
+        ["Using P(x)=20x-500, what x gives break-even?", "25", "Medium", "Set profit to zero: 20x-500=0."],
+        ["Demand is p=80-q and cost is C=200+20q. Revenue R(q) equals what?", "R(q) = 80q - q^2", "Hard", "Revenue is price times quantity: q(80-q)."],
+        ["For R(q)=80q-q^2, find R(10).", "700", "Medium", "80(10)-10^2=800-100."],
+        ["Supply p=15+2q and demand p=75-q. Find equilibrium q.", "20", "Hard", "Set 15+2q=75-q, so 3q=60."],
+        ["At q=20 for p=15+2q, find equilibrium p.", "55", "Medium", "Substitute q=20: 15+40=55."],
+        ["Invest $2,000 at 5% compound interest for 2 years. Find A.", "2205", "Medium", "A=2000(1.05)^2=2205."],
+        ["Present value of $2,205 due in 2 years at 5% is what?", "2000", "Medium", "PV=2205/(1.05)^2."],
+        ["Solve system y=2x+3 and y=-x+12. Give (x,y).", "(3, 9)", "Medium", "Set 2x+3=-x+12, so 3x=9."],
+        ["For f(x)=x^2-6x+8, list the roots.", "2, 4", "Hard", "Factor as (x-2)(x-4)."],
+        ["A model A=1000(1.08)^t represents what annual growth rate?", "8%", "Easy", "The base 1.08 means 8% growth."],
+        ["If a variable cost is 9 and price is 15, what is contribution margin?", "6", "Easy", "Price minus variable cost is 15-9."],
+        ["Fixed cost is 720 and contribution margin is 6. Find break-even quantity.", "120", "Medium", "Divide fixed cost by contribution margin."],
+        ["Which expression combines two-product revenue?", ["R=p1x1+p2x2", "R=p1+p2-x", "R=x^2 only", "R=C-P"], 0, "Easy", "Total revenue adds price times quantity across products."],
+        ["If p1=8, x1=10, p2=12, x2=5, find total revenue.", "140", "Medium", "8(10)+12(5)=80+60."],
+        ["A table has (0,40), (10,60), (20,80). What is the slope?", "2", "Medium", "The output rises 20 when input rises 10."],
+        ["Using slope 2 and intercept 40, write the linear function.", "y = 2x + 40", "Medium", "Use y=mx+b with m=2 and b=40."],
+        ["Which is the correct order for solving a mixed business equation 2(x+5)=30?", ["Distribute or divide, then isolate x", "Square both sides first", "Ignore parentheses", "Divide by zero"], 0, "Easy", "Use inverse operations while respecting parentheses."],
+        ["Compute \u03A3 i from i=1 to 5 for a five-period total.", "15", "Easy", "Add 1+2+3+4+5."],
+        ["A forecast grows from 100 by 10% for 2 periods. What is the forecast?", "121", "Medium", "100(1.10)^2 = 121."],
+        ["If C=1000+25x and R=45x, profit at x=100 is what?", "1000", "Hard", "Revenue is 4500 and cost is 3500."],
+        ["If profit P(x)=-(x-50)^2+2500, what output maximizes profit?", "50", "Hard", "The vertex gives the maximum output because the parabola opens downward."]
+      ];
+      data.forEach(item => Array.isArray(item[1]) ? q.push(mc(id, item[0], item[1], item[2], item[3], item[4])) : q.push(sa(id, item[0], item[1], item[2], item[3])));
+      return q;
+    }
+
+    const QUESTION_POOL = createQuestionPool();
+    const QUESTIONS_BY_ID = Object.fromEntries(QUESTION_POOL.map(q => [q.id, q]));
+    document.querySelectorAll("[data-rbus-logo]").forEach(img => { img.src = LOGO_DATA_URI; });
+
+    let state = null;
+    let selectedBadge = 0;
+    let feedbackTimer = null;
+
+    function freshState() {
+      return {
+        currentBadge: 0,
+        points: Object.fromEntries(BADGES.map(b => [b.id, 0])),
+        completed: Object.fromEntries(BADGES.map(b => [b.id, false])),
+        introSeen: Object.fromEntries(BADGES.map(b => [b.id, false])),
+        queues: Object.fromEntries(BADGES.map(b => [b.id, []])),
+        indexes: Object.fromEntries(BADGES.map(b => [b.id, 0])),
+        history: Object.fromEntries(BADGES.map(b => [b.id, []]))
+      };
+    }
+
+    function loadState() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        const base = freshState();
+        if (!parsed || typeof parsed !== "object") return base;
+        return {
+          currentBadge: Math.max(0, Math.min(BADGES.length - 1, parsed.currentBadge || 0)),
+          points: { ...base.points, ...(parsed.points || {}) },
+          completed: { ...base.completed, ...(parsed.completed || {}) },
+          introSeen: { ...base.introSeen, ...(parsed.introSeen || {}) },
+          queues: { ...base.queues, ...(parsed.queues || {}) },
+          indexes: { ...base.indexes, ...(parsed.indexes || {}) },
+          history: { ...base.history, ...(parsed.history || {}) }
+        };
+      } catch {
+        return freshState();
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function shuffle(array) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function badgeQuestions(index) {
+      return QUESTION_POOL.filter(q => q.badgeId === BADGES[index].id);
+    }
+
+    function isUnlocked(index) {
+      if (index === 0) return true;
+      return BADGES.slice(0, index).every(b => state.completed[b.id]);
+    }
+
+    function firstOpenBadge() {
+      const first = BADGES.findIndex(b => !state.completed[b.id]);
+      return first === -1 ? BADGES.length - 1 : first;
+    }
+
+    function ensureQueue(index, forceNew) {
+      const badge = BADGES[index];
+      const ids = badgeQuestions(index).map(q => q.id);
+      const validQueue = (state.queues[badge.id] || []).filter(id => QUESTIONS_BY_ID[id]);
+      if (forceNew || validQueue.length === 0) {
+        state.queues[badge.id] = shuffle(ids);
+        state.indexes[badge.id] = 0;
+      } else {
+        state.queues[badge.id] = validQueue;
+      }
+      saveState();
+    }
+
+    function currentQuestion(index) {
+      const badge = BADGES[index];
+      ensureQueue(index, false);
+      if (state.indexes[badge.id] >= state.queues[badge.id].length) {
+        state.queues[badge.id] = shuffle(badgeQuestions(index).map(q => q.id));
+        state.indexes[badge.id] = 0;
+        saveState();
+      }
+      return QUESTIONS_BY_ID[state.queues[badge.id][state.indexes[badge.id]]];
+    }
+
+    /* ================= COMIC BOOK VIEW LAYER ================= */
+    let viewMode = "title";      // title | map | game
+    let dialogMode = "idle";     // idle | lesson | question | feedback
+    let menuIndex = 0;
+    let lessonPage = 0;
+    let mapPos = 0;
+    let soundOn = true;
+    let typeTimer = null;
+    let currentQ = null;
+    let currentOpts = null;
+
+    /* The cast: one comic hero/keeper per chapter (Rutgers wardrobe). */
+    const CAST = [
+      { n: "CAPTAIN COUNT", ep: "Guardian of the Number Line", suit: "#CC0033", hair: "#141414", acc: "cap" },
+      { n: "THE OPERATOR", ep: "Hero of the Law of Signs", suit: "#141414", hair: "#6e6e78", acc: "mask" },
+      { n: "THE FRACTIONEER", ep: "Forger of Perfect Parts", suit: "#6e6e78", hair: "#3a3a44", acc: "headband" },
+      { n: "DOCTOR POWER", ep: "Master of Exponents", suit: "#E51937", hair: "#f0f0f0", acc: "glasses" },
+      { n: "THE NOTATOR", ep: "Scribe of Secret Symbols", suit: "#3a3a44", hair: "#141414", acc: "monocle" },
+      { n: "SUPER SIGMA", ep: "The Summation Sensation", suit: "#CC0033", hair: "#5a3a1e", acc: "mask" },
+      { n: "THE POLYNOMIAL", ep: "Builder of Many Terms", suit: "#9aa1ad", hair: "#141414", acc: "cap" },
+      { n: "MISTER X", ep: "Agent of Algebra", suit: "#141414", hair: "#141414", acc: "hat" },
+      { n: "THE FUNCTION MACHINE", ep: "It Takes X... It Gives f(x)!", robot: true },
+      { n: "GRID RIDER", ep: "Navigator of the Plane", suit: "#CC0033", hair: "#3a3a44", acc: "visor" },
+      { n: "SLOPE RANGER", ep: "The Line Wrangler", suit: "#c9a24c", hair: "#5a3a1e", acc: "hat" },
+      { n: "CAPTAIN QUADRATIC", ep: "Rider of Parabolas", suit: "#E51937", hair: "#141414", acc: "mask" },
+      { n: "MADAME CURVE", ep: "Oracle of Growth and Decay", suit: "#f0cdd6", hair: "#f0f0f0", acc: "glasses" },
+      { n: "THE INTERSECTOR", ep: "Where All Systems Meet", suit: "#2a2d3a", hair: "#6e6e78", acc: "visor" },
+      { n: "COUNT CASHWORTH", ep: "Banker of the Realm", suit: "#b8860b", hair: "#f0f0f0", acc: "monocle" },
+      { n: "DR. ANALYSIS", ep: "The Final Boss", robot: true, boss: true }
+    ];
+
+    /* ---------- comic sounds ---------- */
+    let audioCtx = null;
+    function beep(freq, dur, type, when) {
+      if (!soundOn) return;
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      try {
+        audioCtx = audioCtx || new AC();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type || "square";
+        osc.frequency.value = freq;
+        gain.gain.value = 0.05;
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        const t = audioCtx.currentTime + (when || 0);
+        osc.start(t); osc.stop(t + (dur || 0.08));
+      } catch (e) { /* no audio */ }
+    }
+    function sndSelect() { beep(660, 0.05); }
+    function sndCorrect() { beep(660, 0.07); beep(880, 0.1, "square", 0.08); }
+    function sndWrong() { beep(150, 0.22, "sawtooth"); }
+    function sndSeal() { [523, 659, 784, 1047].forEach((f, k) => beep(f, 0.11, "square", k * 0.09)); }
+
+    /* ---------- comic character busts (bold-outline SVG) ---------- */
+    function bustSvg(i, w, isPlayer) {
+      const c = isPlayer ? { n: "THE SCARLET SCHOLAR", suit: "#CC0033", hair: "#CC0033", acc: "cowl" } : CAST[i];
+      if (c.robot) return robotBust(w, !!c.boss);
+      const skin = "#f2c9a0";
+      let acc = "";
+      if (c.acc === "mask" || c.acc === "cowl") {
+        acc = `<rect x="36" y="38" width="48" height="17" rx="8" fill="${c.acc === "cowl" ? "#8a0020" : "#141414"}" stroke="#141414" stroke-width="3"/>
+               <circle cx="49" cy="47" r="4.6" fill="#fff"/><circle cx="71" cy="47" r="4.6" fill="#fff"/>`;
+      } else if (c.acc === "glasses") {
+        acc = `<circle cx="49" cy="47" r="8.5" fill="#fff" stroke="#141414" stroke-width="3"/>
+               <circle cx="71" cy="47" r="8.5" fill="#fff" stroke="#141414" stroke-width="3"/>
+               <line x1="57" y1="47" x2="63" y2="47" stroke="#141414" stroke-width="3"/>
+               <circle cx="49" cy="47" r="2.6" fill="#141414"/><circle cx="71" cy="47" r="2.6" fill="#141414"/>`;
+      } else if (c.acc === "monocle") {
+        acc = `<circle cx="71" cy="47" r="8.5" fill="#fff" stroke="#141414" stroke-width="3"/>
+               <line x1="77" y1="54" x2="82" y2="66" stroke="#141414" stroke-width="2.5"/>
+               <circle cx="49" cy="47" r="3" fill="#141414"/><circle cx="71" cy="47" r="2.6" fill="#141414"/>`;
+      } else if (c.acc === "visor") {
+        acc = `<rect x="37" y="40" width="46" height="13" rx="6" fill="#2a2d3a" stroke="#141414" stroke-width="3"/>
+               <rect x="41" y="44" width="38" height="4" rx="2" fill="#E51937"/>`;
+      } else {
+        acc = `<circle cx="49" cy="47" r="3.2" fill="#141414"/><circle cx="71" cy="47" r="3.2" fill="#141414"/>`;
+      }
+      let topper = "";
+      if (c.acc === "hat") {
+        topper = `<ellipse cx="60" cy="26" rx="31" ry="8" fill="#141414" stroke="#141414" stroke-width="2"/>
+                  <rect x="42" y="6" width="36" height="22" rx="5" fill="#141414"/>
+                  <rect x="42" y="20" width="36" height="6" fill="${c.suit}"/>`;
+      } else if (c.acc === "cap") {
+        topper = `<polygon points="60,2 94,14 60,26 26,14" fill="#141414" stroke="#141414" stroke-width="2"/>
+                  <line x1="92" y1="15" x2="92" y2="30" stroke="#141414" stroke-width="3"/>
+                  <circle cx="92" cy="32" r="4" fill="#f5c542" stroke="#141414" stroke-width="2"/>`;
+      } else if (c.acc === "headband") {
+        topper = `<rect x="34" y="27" width="52" height="9" fill="#CC0033" stroke="#141414" stroke-width="3"/>`;
+      }
+      const hair = c.acc === "cowl"
+        ? `<path d="M31 44 Q31 12 60 12 Q89 12 89 44 L82 38 Q74 26 60 26 Q46 26 38 38 Z" fill="#CC0033" stroke="#141414" stroke-width="3"/>`
+        : `<path d="M32 42 Q34 13 60 13 Q86 13 88 42 Q74 28 60 29 Q46 28 32 42 Z" fill="${c.hair}" stroke="#141414" stroke-width="3"/>`;
+      const emblem = isPlayer ? "R" : c.n.charAt(c.n.startsWith("THE ") ? 4 : 0);
+      return `<svg viewBox="0 0 120 128" width="${w}" height="${Math.round(w * 128 / 120)}" role="img" aria-label="${c.n}">
+        <path d="M14 128 Q22 90 60 88 Q98 90 106 128 Z" fill="${c.suit}" stroke="#141414" stroke-width="4"/>
+        <rect x="52" y="74" width="16" height="16" fill="${skin}" stroke="#141414" stroke-width="3"/>
+        <circle cx="60" cy="47" r="29" fill="${skin}" stroke="#141414" stroke-width="4"/>
+        ${hair}${acc}
+        <path d="M50 61 Q60 69 70 61" stroke="#141414" stroke-width="3" fill="none" stroke-linecap="round"/>
+        ${topper}
+        <circle cx="60" cy="108" r="13" fill="#fff" stroke="#141414" stroke-width="3"/>
+        <text x="60" y="114" text-anchor="middle" font-family="Impact,Arial Black,sans-serif" font-size="15" fill="#CC0033">${emblem}</text>
+      </svg>`;
+    }
+    function robotBust(w, boss) {
+      return `<svg viewBox="0 0 120 128" width="${w}" height="${Math.round(w * 128 / 120)}" role="img" aria-label="robot character">
+        ${boss ? '<polygon points="38,16 46,2 54,14 60,0 66,14 74,2 82,16" fill="#f5c542" stroke="#141414" stroke-width="3"/>' : '<line x1="60" y1="2" x2="60" y2="14" stroke="#141414" stroke-width="4"/><circle cx="60" cy="4" r="4" fill="#f5c542" stroke="#141414" stroke-width="2"/>'}
+        <path d="M14 128 Q22 92 60 90 Q98 92 106 128 Z" fill="${boss ? "#141414" : "#6e6e78"}" stroke="#141414" stroke-width="4"/>
+        <rect x="30" y="16" width="60" height="56" rx="12" fill="#9aa1ad" stroke="#141414" stroke-width="4"/>
+        <rect x="40" y="32" width="14" height="10" rx="3" fill="${boss ? "#E51937" : "#141414"}"/>
+        <rect x="66" y="32" width="14" height="10" rx="3" fill="${boss ? "#E51937" : "#141414"}"/>
+        <line x1="42" y1="58" x2="78" y2="58" stroke="#141414" stroke-width="3"/>
+        <line x1="48" y1="54" x2="48" y2="62" stroke="#141414" stroke-width="2"/>
+        <line x1="60" y1="54" x2="60" y2="62" stroke="#141414" stroke-width="2"/>
+        <line x1="72" y1="54" x2="72" y2="62" stroke="#141414" stroke-width="2"/>
+        <circle cx="60" cy="108" r="13" fill="#fff" stroke="#141414" stroke-width="3"/>
+        <text x="60" y="114" text-anchor="middle" font-family="Impact,Arial Black,sans-serif" font-size="15" fill="#CC0033">${boss ? "&#937;" : "f(x)"}</text>
+      </svg>`;
+    }
+    function burstSvg(fill) {
+      let pts = [];
+      for (let k = 0; k < 26; k++) {
+        const r = k % 2 ? 56 : 100;
+        const a = Math.PI * 2 * k / 26;
+        pts.push((100 + r * Math.cos(a)).toFixed(1) + "," + (100 + r * Math.sin(a)).toFixed(1));
+      }
+      return `<svg viewBox="0 0 200 200" aria-hidden="true"><polygon points="${pts.join(" ")}" fill="${fill}" stroke="#141414" stroke-width="5"/></svg>`;
+    }
+
+    /* ---------- HUD / hints ---------- */
+    function renderHud() {
+      const idx = (viewMode === "game") ? selectedBadge : Math.min(mapPos, firstOpenBadge());
+      const badge = BADGES[idx];
+      document.getElementById("hudCoins").textContent = fmt(state.points[badge.id] || 0);
+      document.getElementById("hudSeals").textContent = BADGES.filter(b => state.completed[b.id]).length;
+    }
+    function setHint(text) { document.getElementById("hintBar").textContent = text; }
+
+    /* ---------- view switching ---------- */
+    function setView(showGame) {
+      viewMode = showGame ? "game" : "map";
+      document.getElementById("landing").classList.add("hidden");
+      document.getElementById("mapScreen").classList.toggle("hidden", showGame);
+      document.getElementById("gamePanel").classList.toggle("hidden", !showGame);
+      if (!showGame) {
+        dialogMode = "idle";
+        setHint("Arrow keys move the spotlight — ENTER opens a chapter. Grayed panels are still at the printers!");
+      }
+      renderHud();
+    }
+    function showMap() { setView(false); renderBadgeMap(); }
+    function maxReachable() {
+      const open = firstOpenBadge();
+      return BADGES.every(b => state.completed[b.id]) ? BADGES.length - 1 : open;
+    }
+
+    /* ---------- table of contents ---------- */
+    function renderBadgeMap() {
+      const mapEl = document.getElementById("mapScreen");
+      if (!mapEl) return;
+      mapPos = Math.min(mapPos, maxReachable());
+      const cards = BADGES.map((badge, i) => {
+        const done = state.completed[badge.id];
+        const locked = !isUnlocked(i) && !done;
+        const cls = ["chapter", done ? "done" : "", locked ? "locked" : "", i === mapPos ? "current" : ""].filter(Boolean).join(" ");
+        const quest = badge.name.replace(" Badge", "");
+        return `<button type="button" class="${cls}" data-i="${i}" ${locked ? 'aria-disabled="true"' : ""}>
+            <span class="ch-num">CH.${i + 1}</span>
+            ${done ? '<span class="ch-star">&#9733;</span><span class="stamp">SOLVED!</span>' : ""}
+            ${bustSvg(i, 62)}
+            <span class="ch-name">${escapeHtml(CAST[i].n)}</span>
+            <span class="ch-quest">${escapeHtml(quest)}</span>
+            ${locked ? '<span class="ch-lock">NEXT ISSUE&hellip;</span>' : ""}
+          </button>`;
+      }).join("");
+      mapEl.innerHTML = `
+        <span class="onoma" style="top:2%;right:2%;font-size:40px;transform:rotate(9deg)">BAM!</span>
+        <span class="onoma" style="bottom:4%;left:2%;font-size:36px;transform:rotate(-11deg)">f(x)!</span>
+        <h2 class="page-title">TABLE OF CONTENTS</h2>
+        <div class="chapters">${cards}</div>`;
+      mapEl.querySelectorAll(".chapter").forEach(el => {
+        el.addEventListener("click", () => {
+          const i = Number(el.dataset.i);
+          const done = state.completed[BADGES[i].id];
+          if (!isUnlocked(i) && !done) {
+            sndWrong();
+            setHint("The Math Code Authority forbids skipping ahead! Solve the previous chapter first.");
+            return;
+          }
+          mapPos = i;
+          sndSelect();
+          openBadge(i, false);
+        });
+      });
+      renderHud();
+    }
+    function moveOnMap(dir) {
+      const target = mapPos + dir;
+      if (target < 0 || target >= BADGES.length) return;
+      const done = state.completed[BADGES[target].id];
+      if (!isUnlocked(target) && !done) { sndWrong(); setHint("That chapter is still at the printers! Solve the previous one first."); return; }
+      mapPos = target;
+      sndSelect();
+      document.querySelectorAll("#mapScreen .chapter").forEach(el =>
+        el.classList.toggle("current", Number(el.dataset.i) === mapPos));
+      renderHud();
+    }
+
+    /* ---------- open a chapter ---------- */
+    function openBadge(index, freshAttempt) {
+      if (index >= BADGES.length) { showMap(); return; }
+      if (!isUnlocked(index) && !state.completed[BADGES[index].id]) return;
+      selectedBadge = index;
+      mapPos = index;
+      state.currentBadge = state.completed[BADGES[index].id] ? firstOpenBadge() : index;
+      if (!state.completed[BADGES[index].id]) ensureQueue(index, freshAttempt);
+      saveState();
+      setView(true);
+      renderGame();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    /* ---------- panels ---------- */
+    function typeText(el, text, done) {
+      clearInterval(typeTimer);
+      let finished = false;
+      const finish = () => {
+        if (finished) return;
+        finished = true;
+        clearInterval(typeTimer);
+        el.textContent = text;
+        el.onclick = null;
+        if (done) done();
+      };
+      if (window.__instantType) { finish(); return; }
+      el.textContent = "";
+      let i = 0;
+      typeTimer = setInterval(() => {
+        i += 2;
+        el.textContent = text.slice(0, i);
+        if (i >= text.length) finish();
+      }, 15);
+      el.onclick = finish;
+    }
+
+    function panelShell(index) {
+      const badge = BADGES[index];
+      const points = state.points[badge.id] || 0;
+      const pct = Math.min(100, (points / PASS_POINTS) * 100);
+      return `
+        <div class="strip">
+          <span class="caption-box">CHAPTER ${index + 1}: ${escapeHtml(badge.name.replace(" Badge", "").toUpperCase())}</span>
+          <span class="caption-box alt" id="qMeta">STARRING ${escapeHtml(CAST[index].n)}</span>
+        </div>
+        <div class="panel qpanel">
+          <div class="npc-side">${bustSvg(index, 132)}
+            <span class="char-name">${escapeHtml(CAST[index].n)}<i>${escapeHtml(CAST[index].ep)}</i></span>
+          </div>
+          <div class="q-main">
+            <div class="bubble npc-bubble"><span id="dlgText"></span></div>
+            <div id="optArea"></div>
+            <div class="player-row">
+              <div class="bubble player-bubble thought" id="playerBubble">Hmm&hellip;</div>
+              <div class="player-side">${bustSvg(0, 84, true)}
+                <span class="char-name">THE SCARLET SCHOLAR<i>(you!)</i></span>
+              </div>
+            </div>
+          </div>
+          <div id="fxLayer"></div>
+        </div>
+        <div class="dlg-actions" id="dlgActions"></div>
+        <div class="quest-strip">
+          <span><span class="coin"></span> CHAPTER COINS: <b id="stripCoins">${fmt(points)}</b> / ${PASS_POINTS}</span>
+          <div class="coinbar"><span id="stripBar" style="width:${pct}%"></span></div>
+          <button class="text-button" id="leaveQuest" type="button">BACK TO CONTENTS</button>
+        </div>`;
+    }
+    function wireShell() {
+      document.getElementById("leaveQuest").addEventListener("click", () => { clearTimeout(feedbackTimer); showMap(); });
+    }
+    function updateStrip() {
+      const badge = BADGES[selectedBadge];
+      const points = state.points[badge.id] || 0;
+      const el = document.getElementById("stripCoins");
+      if (el) el.textContent = fmt(points);
+      const bar = document.getElementById("stripBar");
+      if (bar) bar.style.width = Math.min(100, (points / PASS_POINTS) * 100) + "%";
+      renderHud();
+    }
+    function playerSay(html, thought) {
+      const pb = document.getElementById("playerBubble");
+      if (!pb) return;
+      pb.classList.toggle("thought", !!thought);
+      pb.innerHTML = html;
+    }
+    function showFx(kind, text, sub) {
+      const layer = document.getElementById("fxLayer");
+      if (!layer) return;
+      const fill = kind === "good" ? "#f5c542" : kind === "bad" ? "#CC0033" : "#9aa1ad";
+      layer.innerHTML = burstSvg(fill) + `<div class="fx-text">${text}<span>${sub}</span></div>`;
+      layer.classList.add("show");
+    }
+
+    function renderGame() {
+      const badge = BADGES[selectedBadge];
+      const panel = document.getElementById("gamePanel");
+      if (state.completed[badge.id]) {
+        dialogMode = "idle";
+        panel.innerHTML = completionTemplate(selectedBadge);
+        wireCompletionButtons();
+        setHint("Chapter SOLVED! The case file below reveals every answer and explanation. Print it for your records!");
+      } else if (!state.introSeen[badge.id]) {
+        panel.innerHTML = panelShell(selectedBadge);
+        wireShell();
+        startLesson();
+      } else {
+        panel.innerHTML = panelShell(selectedBadge);
+        wireShell();
+        showQuestion();
+      }
+    }
+
+    /* ---------- story pages (the keeper explains) ---------- */
+    function lessonPages() {
+      const badge = BADGES[selectedBadge];
+      const hero = CAST[selectedBadge];
+      const greet = hero.boss
+        ? "MWAHAHA! So the Scarlet Scholar reaches my lair at last! I am DR. ANALYSIS — and this final chapter mixes EVERYTHING: algebra, functions, systems, and finance!"
+        : `${hero.n} here — ${hero.ep}! Welcome to my chapter of the quest, Scholar!`;
+      const offer = `Here's the deal: every question I ask earns gold coins — EASY 5, MEDIUM 10, HARD 15, CHALLENGE 20. Wrong answers cost HALF the coins, skips earn zero. Collect ${PASS_POINTS} coins and this chapter is SOLVED! Ready?`;
+      return [greet, ...(badge.concepts || []), offer];
+    }
+    function startLesson() {
+      dialogMode = "lesson";
+      lessonPage = 0;
+      setHint("ENTER / SPACE or click the NEXT burst to keep the story moving.");
+      playerSay("A new chapter&hellip; let's hear it!", true);
+      showLessonPage();
+    }
+    function showLessonPage() {
+      const pages = lessonPages();
+      const actions = document.getElementById("dlgActions");
+      document.getElementById("optArea").innerHTML = "";
+      const last = lessonPage >= pages.length - 1;
+      actions.innerHTML = "";
+      typeText(document.getElementById("dlgText"), pages[lessonPage], () => {
+        actions.innerHTML = last
+          ? `<button class="burst-btn scarlet" id="acceptQuest" type="button">LET'S DO THIS!</button>
+             <button class="secondary" id="declineQuest" type="button">BACK TO CONTENTS</button>`
+          : `<button class="burst-btn" id="nextPage" type="button">NEXT &#9658;</button>`;
+        const nextBtn = document.getElementById("nextPage");
+        if (nextBtn) nextBtn.addEventListener("click", advanceLesson);
+        const accept = document.getElementById("acceptQuest");
+        if (accept) accept.addEventListener("click", acceptQuest);
+        const decline = document.getElementById("declineQuest");
+        if (decline) decline.addEventListener("click", showMap);
+      });
+    }
+    function advanceLesson() {
+      const pages = lessonPages();
+      if (lessonPage < pages.length - 1) { sndSelect(); lessonPage += 1; showLessonPage(); }
+    }
+    function acceptQuest() {
+      const badge = BADGES[selectedBadge];
+      sndSelect();
+      state.introSeen[badge.id] = true;
+      ensureQueue(selectedBadge, false);
+      saveState();
+      showQuestion();
+    }
+
+    /* ---------- question panels ---------- */
+    const LETTERS = ["A", "B", "C", "D", "E"];
+    function showQuestion() {
+      currentQ = currentQuestion(selectedBadge);
+      currentOpts = currentQ.type === "multiple-choice" ? shuffle(currentQ.options) : null;
+      dialogMode = "question";
+      menuIndex = 0;
+      const badge = BADGES[selectedBadge];
+      const playNum = (state.history[badge.id] || []).length + 1;
+      const fx = document.getElementById("fxLayer");
+      if (fx) { fx.classList.remove("show"); fx.innerHTML = ""; }
+      document.getElementById("qMeta").innerHTML =
+        `PAGE ${playNum} &middot; <em>${escapeHtml(String(currentQ.difficulty).toUpperCase())} &middot; +${currentQ.points} COINS</em>`;
+      document.getElementById("optArea").innerHTML = "";
+      document.getElementById("dlgActions").innerHTML = "";
+      playerSay("Hmm&hellip; let me think!", true);
+      setHint(currentQ.type === "multiple-choice"
+        ? "↑↓ or 1-4 choose a bubble · ENTER answers · S skips. Wrong answers cost half the coins!"
+        : "Type in your speech bubble · ENTER answers · S skips. Wrong answers cost half the coins!");
+      typeText(document.getElementById("dlgText"), currentQ.prompt, () => {
+        if (dialogMode !== "question") return;
+        const optArea = document.getElementById("optArea");
+        if (currentOpts) {
+          optArea.innerHTML = `<ul id="menu">${currentOpts.map((o, k) =>
+            `<li data-l="${LETTERS[k]}" class="${k === 0 ? "sel" : ""}">${escapeHtml(o)}</li>`).join("")}</ul>`;
+          optArea.querySelectorAll("li").forEach((li, k) => {
+            li.addEventListener("click", () => {
+              if (dialogMode !== "question") return;
+              if (menuIndex === k) { submitAnswer(); return; }
+              menuIndex = k; syncMenu(); sndSelect();
+            });
+          });
+          syncMenu();
+        } else {
+          playerSay(`MY ANSWER IS&hellip;<input class="dlg-input" id="shortAnswer" type="text" autocomplete="off" inputmode="text" aria-label="Your answer" placeholder="type it here!">`, false);
+          const input = document.getElementById("shortAnswer");
+          input.focus();
+          input.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); submitAnswer(); } });
+        }
+        document.getElementById("dlgActions").innerHTML = `
+          <button class="burst-btn scarlet" id="answerBtn" type="button">ANSWER!</button>
+          <button class="secondary" id="skipBtn" type="button">PASS THE PAGE (0 COINS)</button>
+          <span style="font-size:11px;font-weight:700;color:var(--gray)">WRONG ANSWER: &minus;${fmt(currentQ.points / 2)} COINS</span>`;
+        document.getElementById("answerBtn").addEventListener("click", submitAnswer);
+        document.getElementById("skipBtn").addEventListener("click", skipQuestion);
+      });
+    }
+    function syncMenu() {
+      document.querySelectorAll("#menu li").forEach((li, k) => li.classList.toggle("sel", k === menuIndex));
+      if (currentOpts) playerSay(`I choose <b>${LETTERS[menuIndex]}</b>: &ldquo;${escapeHtml(currentOpts[menuIndex])}&rdquo;!`, false);
+    }
+    function submitAnswer() {
+      if (dialogMode !== "question") return;
+      const q = currentQ;
+      let answerText;
+      if (currentOpts) { answerText = currentOpts[menuIndex]; }
+      else {
+        const input = document.getElementById("shortAnswer");
+        answerText = input ? input.value.trim() : "";
+        if (!answerText) { setHint("Your speech bubble is empty! Type an answer or pass the page."); return; }
+      }
+      dialogMode = "feedback";
+      const badge = BADGES[selectedBadge];
+      const correct = isCorrect(q, answerText);
+      const delta = correct ? q.points : -(q.points / 2);
+      recordAttempt(correct ? "Right" : "Wrong", answerText, delta);
+      const earned = state.completed[badge.id];
+      document.getElementById("dlgActions").innerHTML = "";
+      if (correct) {
+        sndCorrect();
+        showFx("good", "KA-CHING!", `+${q.points} COINS${earned ? " — CHAPTER SOLVED!" : ""}`);
+        document.getElementById("dlgText").textContent = earned
+          ? "INCREDIBLE! You've earned every coin I have — this chapter is SOLVED!"
+          : "Correct! Well played, Scholar.";
+      } else {
+        sndWrong();
+        showFx("bad", "WHIFF!", `−${fmt(q.points / 2)} COINS — KEEP GOING!`);
+        document.getElementById("dlgText").textContent = "Incorrect! But every hero stumbles — keep going.";
+      }
+      updateStrip();
+      feedbackTimer = setTimeout(() => {
+        if (state.completed[badge.id]) { sndSeal(); renderGame(); renderBadgeMap(); }
+        else showQuestion();
+      }, earned ? 1600 : 1050);
+    }
+    function skipQuestion() {
+      if (dialogMode !== "question") return;
+      dialogMode = "feedback";
+      recordAttempt("Skipped", "Skipped", 0);
+      document.getElementById("dlgActions").innerHTML = "";
+      showFx("skip", "SKIP!", "0 COINS");
+      updateStrip();
+      feedbackTimer = setTimeout(() => showQuestion(), 700);
+    }
+
+    /* ---------- global keyboard ---------- */
+    function initKeys() {
+      document.addEventListener("keydown", e => {
+        const tag = e.target ? e.target.tagName : "";
+        if (tag === "INPUT" && e.key !== "Enter") return;
+        if (viewMode === "map") {
+          if (e.key === "ArrowRight") { e.preventDefault(); moveOnMap(1); }
+          else if (e.key === "ArrowLeft") { e.preventDefault(); moveOnMap(-1); }
+          else if (e.key === "ArrowDown") { e.preventDefault(); moveOnMap(4); }
+          else if (e.key === "ArrowUp") { e.preventDefault(); moveOnMap(-4); }
+          else if (e.key === "Enter" || e.key === " ") {
+            if (tag === "BUTTON" && e.key === " ") return;
+            e.preventDefault(); openBadge(mapPos, false);
+          }
+          return;
+        }
+        if (viewMode !== "game") return;
+        if (dialogMode === "lesson") {
+          if ((e.key === "Enter" || e.key === " ") && tag !== "BUTTON") { e.preventDefault(); advanceLesson(); }
+          return;
+        }
+        if (dialogMode !== "question") return;
+        if (currentOpts) {
+          if (e.key === "ArrowDown" || e.key === "ArrowRight") { e.preventDefault(); menuIndex = Math.min(currentOpts.length - 1, menuIndex + 1); syncMenu(); sndSelect(); }
+          else if (e.key === "ArrowUp" || e.key === "ArrowLeft") { e.preventDefault(); menuIndex = Math.max(0, menuIndex - 1); syncMenu(); sndSelect(); }
+          else if (/^[1-9]$/.test(e.key) && Number(e.key) <= currentOpts.length) { menuIndex = Number(e.key) - 1; syncMenu(); submitAnswer(); }
+        }
+        if (e.key === "Enter" && tag !== "BUTTON" && tag !== "INPUT") { e.preventDefault(); submitAnswer(); }
+        else if ((e.key === "s" || e.key === "S") && tag !== "INPUT") { e.preventDefault(); skipQuestion(); }
+      });
+    }
+
+        function normalizeAnswer(value) {
+      return String(value)
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ")
+        .replaceAll("$", "")
+        .replaceAll(",", "")
+        .replaceAll("\u2212", "-");
+    }
+
+    function answersMatch(input, answers) {
+      const normalized = normalizeAnswer(input);
+      return answers.some(answer => {
+        const target = normalizeAnswer(answer);
+        const inputNumber = Number(normalized.replace("%", ""));
+        const targetNumber = Number(target.replace("%", ""));
+        if (Number.isFinite(inputNumber) && Number.isFinite(targetNumber)) {
+          return Math.abs(inputNumber - targetNumber) < 0.001;
+        }
+        return normalized === target;
+      });
+    }
+
+    function studentAnswerText(q) {
+      if (q.type === "multiple-choice") {
+        const selected = document.querySelector("input[name='answer']:checked");
+        return selected ? selected.value : "";
+      }
+      return document.getElementById("shortAnswer").value.trim();
+    }
+
+    function isCorrect(q, answerText) {
+      if (!answerText) return false;
+      if (q.type === "multiple-choice") {
+        return answersMatch(answerText, q.answers);
+      }
+      return answersMatch(answerText, q.answers);
+    }
+
+    function recordAttempt(status, answerText, delta) {
+      const badge = BADGES[selectedBadge];
+      const q = currentQuestion(selectedBadge);
+      state.history[badge.id].push({
+        number: state.history[badge.id].length + 1,
+        questionId: q.id,
+        prompt: q.prompt,
+        studentAnswer: status === "Skipped" ? "Skipped" : answerText,
+        status,
+        correctAnswer: q.answers[0],
+        explanation: q.explanation,
+        difficulty: q.difficulty,
+        points: q.points,
+        delta
+      });
+      state.points[badge.id] = Math.max(0, Number(((state.points[badge.id] || 0) + delta).toFixed(2)));
+      state.indexes[badge.id] += 1;
+      if (state.points[badge.id] >= PASS_POINTS) {
+        state.completed[badge.id] = true;
+        const next = Math.min(BADGES.length - 1, selectedBadge + 1);
+        state.currentBadge = next;
+      }
+      saveState();
+      renderBadgeMap();
+    }
+
+    function badgeSvg(name) {
+      const safeName = escapeHtml(name.replace(" Badge", ""));
+      return `
+        <svg viewBox="0 0 520 360" role="img" aria-label="${safeName} badge image">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1">
+              <stop offset="0" stop-color="#cc0033"/>
+              <stop offset="1" stop-color="#e51937"/>
+            </linearGradient>
+          </defs>
+          <rect x="18" y="18" width="484" height="324" rx="28" fill="#fff" stroke="#d6d9df" stroke-width="4"/>
+          <circle cx="260" cy="124" r="78" fill="url(#g)"/>
+          <circle cx="260" cy="124" r="60" fill="#fff" stroke="#fff" stroke-width="5" opacity="0.98"/>
+          <image href="${LOGO_DATA_URI}" x="204" y="70" width="112" height="108" preserveAspectRatio="xMidYMid meet"/>
+          <path d="M210 194h100l-12 46-38-20-38 20z" fill="#d6a93a"/>
+          <text x="260" y="278" text-anchor="middle" font-family="Arial,sans-serif" font-size="24" font-weight="800" fill="#2f3338">${safeName}</text>
+          <text x="260" y="310" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#66707b">Good job! You have earned this badge.</text>
+        </svg>`;
+    }
+
+    function robotSvg() {
+      return `
+        <svg viewBox="0 0 620 420" role="img" aria-label="Triumphant Rutgers-colored AI robot victory image">
+          <rect x="24" y="24" width="572" height="372" rx="28" fill="#ffffff" stroke="#d6d9df" stroke-width="4"/>
+          <text x="80" y="86" font-size="32" font-family="Arial" fill="#cc0033">&#931;</text>
+          <text x="500" y="96" font-size="28" font-family="Arial" fill="#cc0033">x&#178;</text>
+          <text x="90" y="342" font-size="26" font-family="Arial" fill="#66707b">&#960;</text>
+          <text x="462" y="336" font-size="24" font-family="Arial" fill="#66707b">f(x) = 80+</text>
+          <line x1="310" y1="82" x2="310" y2="50" stroke="#cc0033" stroke-width="7"/>
+          <circle cx="310" cy="45" r="12" fill="#d6a93a"/>
+          <rect x="210" y="78" width="200" height="130" rx="28" fill="#e51937"/>
+          <rect x="238" y="112" width="52" height="34" rx="8" fill="#fff"/>
+          <rect x="330" y="112" width="52" height="34" rx="8" fill="#fff"/>
+          <circle cx="264" cy="129" r="8" fill="#cc0033"/>
+          <circle cx="356" cy="129" r="8" fill="#cc0033"/>
+          <path d="M262 168c28 22 68 22 96 0" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+          <rect x="230" y="224" width="160" height="118" rx="18" fill="#cc0033"/>
+          <rect x="250" y="254" width="120" height="72" rx="10" fill="#fff"/>
+          <image href="${LOGO_DATA_URI}" x="258" y="260" width="104" height="60" preserveAspectRatio="xMidYMid meet"/>
+          <path d="M228 244l-72-48" stroke="#cc0033" stroke-width="16" stroke-linecap="round"/>
+          <path d="M392 244l72-48" stroke="#cc0033" stroke-width="16" stroke-linecap="round"/>
+          <circle cx="146" cy="190" r="18" fill="#d6a93a"/>
+          <circle cx="474" cy="190" r="18" fill="#d6a93a"/>
+          <rect x="250" y="342" width="36" height="42" rx="10" fill="#66707b"/>
+          <rect x="334" y="342" width="36" height="42" rx="10" fill="#66707b"/>
+        </svg>`;
+    }
+
+    function completionTemplate(index) {
+      const badge = BADGES[index];
+      const final = index === BADGES.length - 1;
+      const history = state.history[badge.id] || [];
+      const rows = history.map(item => {
+        const statusClass = item.status === "Right" ? "status-right" : item.status === "Wrong" ? "status-wrong" : "status-skipped";
+        return `<tr>
+          <td>${item.number}</td>
+          <td>${escapeHtml(item.prompt)}</td>
+          <td>${escapeHtml(item.studentAnswer)}</td>
+          <td class="${statusClass}">${escapeHtml(item.status)}</td>
+          <td>${escapeHtml(item.correctAnswer)}</td>
+          <td>${escapeHtml(item.explanation)}</td>
+          <td>${escapeHtml(item.difficulty)}</td>
+          <td>${item.points}</td>
+          <td>${fmt(item.delta)}</td>
+        </tr>`;
+      }).join("");
+      const nextButton = index < BADGES.length - 1
+        ? `<button class="primary" id="continueNext" type="button">NEXT CHAPTER &#9658;</button>`
+        : `<button class="primary" id="returnLanding" type="button">BACK TO CONTENTS</button>`;
+      const art = final ? robotSvg() : badgeSvg(badge.name);
+      const message = final
+        ? "You have defeated the final boss! You have now mastered Math Competency."
+        : `Good job! You have earned the ${badge.name}! Another chapter SOLVED!`;
+      return `
+        <div class="badge-art">
+          ${art}
+          <p class="completion-copy">${escapeHtml(message)}</p>
+        </div>
+        <div class="topline">
+          <div>
+            <span class="badge-chip">${fmt(state.points[badge.id])} coins earned</span>
+            <h2>${escapeHtml(badge.name)} &mdash; CASE FILE</h2>
+          </div>
+        </div>
+        <div class="actions">
+          ${nextButton}
+          <button class="text-button" id="printReport" type="button">PRINT THE CASE FILE</button>
+          <button class="secondary" id="retryBadge" type="button">RE-READ CHAPTER</button>
+        </div>
+        <div class="report-wrap">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Question</th><th>Student Answer</th><th>Status</th><th>Correct Answer</th><th>Explanation</th><th>Difficulty</th><th>Coins</th><th>Coin Delta</th></tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+    }
+
+    function wireCompletionButtons() {
+      const next = document.getElementById("continueNext");
+      const home = document.getElementById("returnLanding");
+      const retry = document.getElementById("retryBadge");
+      const print = document.getElementById("printReport");
+      if (next) next.addEventListener("click", () => openBadge(selectedBadge + 1, true));
+      if (home) home.addEventListener("click", () => { setView(false); renderBadgeMap(); });
+      if (print) print.addEventListener("click", () => printBadgeReport(selectedBadge));
+      retry.addEventListener("click", () => {
+        const badge = BADGES[selectedBadge];
+        if (!confirm(`Re-read ${badge.name}? This clears this chapter attempt and hides its case file until it is solved again.`)) return;
+        clearTimeout(feedbackTimer);
+        state.completed[badge.id] = false;
+        state.introSeen[badge.id] = false;
+        state.points[badge.id] = 0;
+        state.history[badge.id] = [];
+        state.queues[badge.id] = [];
+        state.indexes[badge.id] = 0;
+        state.currentBadge = selectedBadge;
+        ensureQueue(selectedBadge, true);
+        saveState();
+        renderBadgeMap();
+        renderGame();
+      });
+    }
+
+    function printBadgeReport(index) {
+      const badge = BADGES[index];
+      const history = state.history[badge.id] || [];
+      const rows = history.map(item => {
+        const statusClass = item.status === "Right" ? "status-right" : item.status === "Wrong" ? "status-wrong" : "status-skipped";
+        return `<tr>
+          <td>${item.number}</td>
+          <td>${escapeHtml(item.prompt)}</td>
+          <td>${escapeHtml(item.studentAnswer)}</td>
+          <td class="${statusClass}">${escapeHtml(item.status)}</td>
+          <td>${escapeHtml(item.correctAnswer)}</td>
+          <td>${escapeHtml(item.explanation)}</td>
+          <td>${escapeHtml(item.difficulty)}</td>
+          <td>${item.points}</td>
+          <td>${fmt(item.delta)}</td>
+        </tr>`;
+      }).join("");
+      const printArea = document.getElementById("printArea");
+      const printArt = index === BADGES.length - 1 ? robotSvg() : badgeSvg(badge.name);
+      printArea.innerHTML = `
+        <h1>Road to Success: Business Math Quest</h1>
+        <h2>${escapeHtml(badge.name)} Completion Report</h2>
+        <p><strong>Badge coins:</strong> ${fmt(state.points[badge.id] || 0)} / ${PASS_POINTS}</p>
+        <p><strong>Report generated:</strong> ${new Date().toLocaleString()}</p>
+        <div class="print-badge">${printArt}</div>
+        <table>
+          <thead>
+            <tr><th>#</th><th>Question</th><th>Student Answer</th><th>Status</th><th>Correct Answer</th><th>Explanation</th><th>Difficulty</th><th>Coins</th><th>Coin Delta</th></tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+      document.body.classList.add("printing");
+      const cleanUpPrint = () => {
+        document.body.classList.remove("printing");
+        printArea.innerHTML = "";
+        window.removeEventListener("afterprint", cleanUpPrint);
+      };
+      window.addEventListener("afterprint", cleanUpPrint);
+      window.print();
+      setTimeout(cleanUpPrint, 1200);
+    }
+
+    document.getElementById("coverHero").innerHTML = bustSvg(0, 210, true);
+
+    document.getElementById("startBtn").addEventListener("click", () => {
+      sndSelect();
+      mapPos = firstOpenBadge();
+      showMap();
+    });
+
+    document.getElementById("soundBtn").addEventListener("click", () => {
+      soundOn = !soundOn;
+      document.getElementById("soundBtn").textContent = soundOn ? "SOUND:ON" : "SOUND:OFF";
+      if (soundOn) sndSelect();
+    });
+
+    function resetAllProgress() {
+      if (!confirm("Reset all saved Business Math Quest progress in this browser? This will permanently clear every chapter attempt, SOLVED stamp, case file, question order, and coin count for this module.")) return;
+      clearTimeout(feedbackTimer);
+      state = freshState();
+      selectedBadge = 0;
+      mapPos = 0;
+      dialogMode = "idle";
+      saveState();
+      renderBadgeMap();
+      setView(false);
+    }
+
+    document.getElementById("resetModuleSidebarBtn").addEventListener("click", resetAllProgress);
+
+    state = loadState();
+    selectedBadge = firstOpenBadge();
+    mapPos = selectedBadge;
+    initKeys();
+    renderBadgeMap();
+    renderHud();
+
+
+  </script>
+
+  <!--
+    README:
+    Canvas deployment:
+    1. Save this standalone file as business_math_quest_comic_v10.html.
+    2. Upload it to Canvas Files and publish it.
+    3. Add a Canvas Page and embed the published file URL in an iframe, for example:
+       <iframe src="PASTE-CANVAS-FILE-URL-HERE" width="100%" height="900" style="border:0;" allowfullscreen></iframe>
+    4. Place the page in the math competency preparation module before or alongside official Canvas assessments.
+
+    This game is designed as a practice/remediation tool. It does not automatically write scores to the Canvas Gradebook.
+    For official grading, use a Canvas quiz or assignment, or implement a formal LTI/API integration separately.
+  -->
+</body>
+</html>
